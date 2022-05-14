@@ -12,6 +12,6 @@
     hideColumns: new Set([columns.indexOf('Description')]),
     rowsPerPage: 25,
     sortedBy: 'Name',
-    startFilteringDebounceMs: 100,
+    // startFilteringDebounceMs: 100,
   }}
 />

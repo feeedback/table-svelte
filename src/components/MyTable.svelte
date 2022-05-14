@@ -12,7 +12,6 @@
     animateFilterBadExpression,
     highlightQueryInFiltered,
   } from '../utils/table-utils.js';
-  // export let __;
 
   // -------- props --------
   export let data = [];
@@ -23,9 +22,10 @@
       hideColumns: new Set([]),
       rowsPerPage: 30,
       sortedBy: '',
-      startFilteringDebounceMs: 200,
+      startFilteringDebounceMs: 100,
       pageNow: 0,
       sortOrder: 1,
+      debugFilterLog: false,
     },
     ...settings,
   };
@@ -61,6 +61,10 @@
   let filtersExpFnByColIdx = [];
 
   const updateFilter = () => {
+    if (__.debugFilterLog) {
+      console.log(stateFilter);
+    }
+
     filtersRawValueByColIdx = filtersRawValueByColIdx;
     filtersExpFnByColIdx = filtersExpFnByColIdx;
   };
@@ -87,7 +91,6 @@
       filtersRawValueByColIdx[colIdx] = newValue;
       filtersExpFnByColIdx[colIdx] = null;
 
-      console.log(stateFilter);
       updateFilter();
       return;
     }
@@ -107,7 +110,6 @@
       animateFilterBadExpression(elem);
     }
 
-    console.log(stateFilter);
     updateFilter();
   };
 
@@ -181,7 +183,6 @@
     __.hideColumns.delete(collIdx);
     __.hideColumns = __.hideColumns;
   };
-  //  <!-- disabled={columnsCount === columns.length} -->
 </script>
 
 <svelte:head>

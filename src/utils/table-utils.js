@@ -1,7 +1,4 @@
 /* eslint-disable no-useless-concat */
-/* eslint-disable eqeqeq */
-// import { isExpression, isEmptyExpression, isInvalidExpression } from './utils.js';
-
 export const mapMarkToFn = {
   '>=': (pivot) => (x) => x >= pivot,
   '>': (pivot) => (x) => x > pivot,
@@ -34,49 +31,33 @@ export const parseOneExpression = (expression) => {
 export const parseExpression = (expressionRaw) => {
   const expression = expressionRaw.replace(/\s/g, '');
   const conditions = expression.split('&');
-
-  if (conditions.length > 2) {
-    return [null];
-  }
+  const count = conditions.length;
 
   const parsed = conditions.map((cond) => parseOneExpression(cond));
 
-  if (conditions.length > 1 && (parsed[0]?.mark === '=' || parsed[1]?.mark === '=')) {
-    return [null];
+  if (count > 1 && parsed.some((exp) => exp && exp.mark === '=')) {
+    return null;
   }
-  if (conditions.length == 2 && conditions[1] === '') {
-    return [parsed[0]];
+  if (count > 1 && conditions.at(-1) === '') {
+    return parsed.slice(0, -1);
   }
   if (parsed.includes(null)) {
-    return [null];
+    return null;
   }
-  if (conditions.length > 1 && parsed[1].pivotValue === '') {
-    return [parsed[0]];
+  if (count > 1 && conditions.at(-1).pivotValue === '') {
+    return parsed.slice(0, -1);
   }
 
   return parsed;
 };
 
-// export const isExpression = (str) =>
-//   str.startsWith('<') || str.startsWith('>') || str.startsWith('=');
 export const isExpression = (str) => str && /^[>=<]/.test(str);
 export const isEmptyExpression = (str) => marks.some((mark) => str === mark);
-export const isInvalidExpression = (exp) => parseExpression(exp).includes(null);
+export const isInvalidExpression = (exp) => parseExpression(exp) === null;
 export const isValidExpression = (exp) => isExpression(exp) && !isInvalidExpression(exp);
 
-export const getExpressionCheckFn = (exp) => {
-  if (exp.length > 1) {
-    const [{ mark: m1, pivotValue: v1 }, { mark: m2, pivotValue: v2 }] = exp;
-
-    return (x) => mapMarkToFn[m1](v1)(x) && mapMarkToFn[m2](v2)(x);
-  }
-  const [{ mark, pivotValue }] = exp;
-
-  return mapMarkToFn[mark](pivotValue);
-};
-
-// export const isNeedAnimateFilterBadExpression = (exp) =>
-//   isExpression(exp) && !isEmptyExpression(exp) && isInvalidExpression(exp);
+export const getExpressionCheckFn = (exp) => (queryValue) =>
+  exp.every(({ mark, pivotValue }) => mapMarkToFn[mark](pivotValue)(queryValue));
 
 export const animateFilterBadExpression = (elem, conditionalFn = () => true) => {
   const SHAKE_CLASS = 'shake';
