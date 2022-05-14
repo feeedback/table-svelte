@@ -192,8 +192,8 @@
   />
 </svelte:head>
 
-<div class="component-table-container">
-  <div class="columns-list__box">
+<div class="component-table__container">
+  <div class="component-table__columns-list__box">
     <details>
       <summary class="columns-list__header">Columns</summary>
       <div class="columns-list">
@@ -350,7 +350,7 @@
     border-color: #666;
   }
 
-  .component-table-container {
+  .component-table__container {
     margin: 0 15px;
     font-family: monospace;
     /* font-family: 'Roboto Mono', monospace; */
@@ -362,7 +362,7 @@
     overflow-x: auto;
   }
 
-  .component-table-container > * {
+  .component-table__container > * {
     margin-left: auto;
     margin-right: auto;
   }
@@ -500,7 +500,7 @@
     padding: 0.5em 0;
     /* padding-right: 0.8em; */
   }
-  .columns-list__box {
+  .component-table__columns-list__box {
     top: 69px;
     left: 18px;
     position: absolute;
@@ -541,7 +541,7 @@
     line-height: initial;
   }
 
-  .columns-list__box .columns-list__element button {
+  .component-table__columns-list__box .columns-list__element button {
     font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 40;
     text-align: center;
     margin: 0;
@@ -554,31 +554,31 @@
     user-select: none;
     cursor: pointer;
   }
-  .columns-list__box .columns-list__element:hover button {
+  .component-table__columns-list__box .columns-list__element:hover button {
     font-variation-settings: 'FILL' 0, 'wght' 700, 'GRAD' 200, 'opsz' 40;
     /* border: 1px rgb(230, 230, 230) dotted; */
   }
-  .columns-list__box .columns-list__element:hover button.hide-column-button {
+  .component-table__columns-list__box .columns-list__element:hover button.hide-column-button {
     font-variation-settings: 'FILL' 0, 'wght' 700, 'GRAD' 200, 'opsz' 40;
   }
-  .columns-list__box .columns-list__element button:hover {
+  .component-table__columns-list__box .columns-list__element button:hover {
     border-style: solid;
     /* border: 1px rgb(220, 220, 220) dotted; */
   }
 
-  .columns-list__box .columns-list__element .hide-column-button {
+  .component-table__columns-list__box .columns-list__element .hide-column-button {
     /* color: #c85d5d; */
     /* color: #cd5b5b; */
     color: #df5555;
     /* font-family: 'Noto Sans Symbols 2', 'Segoe UI Symbol'; */
   }
-  .columns-list__box .columns-list__element button.hide-column-button:hover {
+  .component-table__columns-list__box .columns-list__element button.hide-column-button:hover {
     color: rgb(216, 34, 34);
   }
-  .columns-list__box .columns-list__element .add-column-button {
+  .component-table__columns-list__box .columns-list__element .add-column-button {
     color: rgb(7, 184, 7);
   }
-  .columns-list__box .columns-list__element .add-column-button:hover {
+  .component-table__columns-list__box .columns-list__element .add-column-button:hover {
     color: rgb(0, 153, 0);
   }
 
