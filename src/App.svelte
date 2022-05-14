@@ -1,11 +1,11 @@
 <script>
   import { generateTestData } from './utils/generate-data.js';
-  import MyTable from './components/MyTable.svelte';
+  import Table from './components/Table.svelte';
 
   const { data, headers: columns } = generateTestData(3000);
 </script>
 
-<MyTable
+<Table
   {data}
   {columns}
   settings={{

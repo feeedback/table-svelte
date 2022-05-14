@@ -81,7 +81,7 @@ export const iconSymbols = {
   pageFirst: '&#x' + 'e5dc;', // ⏮ e5dc e045
   pageLast: '&#x' + 'e5dd;', //  ⏭ e5dd e044
 
-  removeColumn: '&#x' + 'e15b;', // e15b e872 e5cd ✀ 🛇 🞩 🞪 🗑 ❌
+  hideColumn: '&#x' + 'e15b;', // e15b e872 e5cd ✀ 🛇 🞩 🞪 🗑 ❌
   addColumn: '&#x' + 'e145;', // 🞣 🞤 🞥 ＋ + ✚
 };
 export const iconSymbolsByOrder = {
