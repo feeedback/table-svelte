@@ -1,25 +1,22 @@
 <script>
-  export let columns = [];
-  export let hiddenColumns = new Set();
+  export let columnsShown = [];
   export let stateFilter = [];
   export let FILTER_ENUM = {};
   export let handleFilterTyping;
 </script>
 
 <tr class="filter-container__row">
-  {#each columns as columnName, columnIndex}
-    {#if hiddenColumns.has(columnIndex) === false}
-      <th class="filter-container__cell">
-        <input
-          class="filter-container__input"
-          on:input|capture={handleFilterTyping(columnIndex)}
-          class:active-filter={stateFilter[columnIndex] !== FILTER_ENUM.NULL}
-          class:active-filter-expression={stateFilter[columnIndex].includes('EXPRESSION')}
-          class:bad-expression={stateFilter[columnIndex] === FILTER_ENUM.INVALID_EXPRESSION}
-          class:shake={false}
-        />
-      </th>
-    {/if}
+  {#each columnsShown as [columnIndex, columnName]}
+    <th class="filter-container__cell">
+      <input
+        class="filter-container__input"
+        on:input|capture={handleFilterTyping(columnIndex)}
+        class:active-filter={stateFilter[columnIndex] !== FILTER_ENUM.NULL}
+        class:active-filter-expression={stateFilter[columnIndex].includes('EXPRESSION')}
+        class:bad-expression={stateFilter[columnIndex] === FILTER_ENUM.INVALID_EXPRESSION}
+        class:shake={false}
+      />
+    </th>
   {/each}
 </tr>
 

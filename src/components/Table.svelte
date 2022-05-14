@@ -56,6 +56,9 @@
   };
 
   $: stateFilter = columns.map(() => FILTER_ENUM.NULL);
+
+  $: columnsShown = Object.entries(columns).filter(([index]) => !__.hiddenColumns.has(Number(index)));
+
   let filtersRawValueByColIdx = [];
   let filtersExpFnByColIdx = [];
 
@@ -116,7 +119,7 @@
 
   $: counts = {
     rowsAll: data.length,
-    columnsShown: columns.length - __.hiddenColumns.size,
+    columnsShown: columnsShown.length,
 
     page: {
       current: Math.min(__.pageNow + 1, Math.ceil(filteredCount / __.rowsPerPage)),
@@ -159,22 +162,23 @@
         .filter((v, index) => !__.hiddenColumns.has(index))
     );
 
-  const addColumnHandler = (columnIndex) => {
-    __.hiddenColumns.delete(columnIndex);
-    __.hiddenColumns = __.hiddenColumns;
+  const handlers = {
+    hideColumn: (columnIndex) => {
+      __.hiddenColumns.delete(columnIndex);
+      __.hiddenColumns = __.hiddenColumns;
+    },
+    addColumn: (columnIndex) => {
+      resetColumnFilter(columnIndex); // reset filter by this column
+
+      if (sortedByIndex === columnIndex) {
+        // reset sort by this column
+        __.sortedBy = '';
+      }
+
+      __.hiddenColumns.add(columnIndex); // hide column
+      __.hiddenColumns = __.hiddenColumns;
+    },
   };
-  const hideColumnHandler = (columnIndex) => {
-    resetColumnFilter(columnIndex); // reset filter by this column
-
-    if (sortedByIndex === columnIndex) {
-      // reset sort by this column
-      __.sortedBy = '';
-    }
-
-    __.hiddenColumns.add(columnIndex); // hide column
-    __.hiddenColumns = __.hiddenColumns;
-  };
-
   const handleFilterTyping =
     (columnIndex) =>
     ({ currentTarget }) => {
@@ -192,22 +196,13 @@
 </svelte:head>
 
 <div class="component-table__container">
-  <ColumnsHideList
-    {columns}
-    hiddenColumns={__.hiddenColumns}
-    handlers={{ hideColumn: hideColumnHandler, addColumn: addColumnHandler }}
-    icons={icons.column}
-  />
+  <ColumnsHideList {columns} hiddenColumns={__.hiddenColumns} {handlers} icons={icons.column} />
+
   <table class="component-table">
     <thead>
       <TableCountsContainer {counts} bind:pageNow={__.pageNow} icons={icons.page} />
-      <FilterContainer {columns} hiddenColumns={__.hiddenColumns} {stateFilter} {FILTER_ENUM} {handleFilterTyping} />
-      <TableColumnHeader
-        {columns}
-        hiddenColumns={__.hiddenColumns}
-        bind:sortedBy={__.sortedBy}
-        bind:sortOrder={__.sortOrder}
-      />
+      <FilterContainer {columnsShown} {stateFilter} {FILTER_ENUM} {handleFilterTyping} />
+      <TableColumnHeader {columnsShown} bind:sortedBy={__.sortedBy} bind:sortOrder={__.sortOrder} />
     </thead>
     <tbody>
       {#each rowsPage as row}

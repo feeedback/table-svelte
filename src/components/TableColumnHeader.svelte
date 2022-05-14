@@ -1,8 +1,7 @@
 <script>
   import { iconSymbolsByOrder } from '../utils/table-utils.js';
 
-  export let columns = [];
-  export let hiddenColumns;
+  export let columnsShown = {};
   export let sortedBy = '';
   export let sortOrder = 1;
 
@@ -17,19 +16,17 @@
 </script>
 
 <tr class="table-columns-header__row">
-  {#each columns as columnName, columnIndex}
-    {#if hiddenColumns.has(columnIndex) === false}
-      <th on:click={() => changeSortSettingsHandler(columnName)} class="table-columns-header__cell">
-        <span class="table-columns-header"
-          ><span>{columnName}</span>
-          {#if sortedBy === columnName}
-            <span class="table-columns-header__icon-sort material-symbols-outlined"
-              >{@html iconSymbolsByOrder[sortOrder]}</span
-            >
-          {/if}</span
-        >
-      </th>
-    {/if}
+  {#each columnsShown as [columnIndex, columnName]}
+    <th on:click={() => changeSortSettingsHandler(columnName)} class="table-columns-header__cell">
+      <span class="table-columns-header"
+        ><span>{columnName}</span>
+        {#if sortedBy === columnName}
+          <span class="table-columns-header__icon-sort material-symbols-outlined"
+            >{@html iconSymbolsByOrder[sortOrder]}</span
+          >
+        {/if}</span
+      >
+    </th>
   {/each}
 </tr>
 
