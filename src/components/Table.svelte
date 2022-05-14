@@ -3,10 +3,10 @@
   import ColumnsHideList from './ColumnsHideList.svelte';
   import TableCountsContainer from './TableCountsContainer.svelte';
   import FilterContainer from './FilterContainer.svelte';
+  import TableColumnHeader from './TableColumnHeader.svelte';
 
   import {
     iconSymbols as icons,
-    iconSymbolsByOrder,
     getExpressionCheckFn,
     isExpression,
     parseExpression,
@@ -159,31 +159,22 @@
         .filter((v, index) => !__.hiddenColumns.has(index))
     );
 
-  const changeSortSettingsHandler = (fieldName) => {
-    if (__.sortedBy === fieldName) {
-      __.sortOrder *= -1;
-    } else {
-      __.sortOrder = 1;
-    }
-    __.sortedBy = fieldName;
+  const addColumnHandler = (columnIndex) => {
+    __.hiddenColumns.delete(columnIndex);
+    __.hiddenColumns = __.hiddenColumns;
   };
+  const hideColumnHandler = (columnIndex) => {
+    resetColumnFilter(columnIndex); // reset filter by this column
 
-  const hideColumnHandler = (colIdx) => {
-    // reset filter by this column
-    resetColumnFilter(colIdx);
-    // reset sort by this column
-    if (sortedByIndex === colIdx) {
+    if (sortedByIndex === columnIndex) {
+      // reset sort by this column
       __.sortedBy = '';
     }
 
-    __.hiddenColumns.add(colIdx); // hide column
+    __.hiddenColumns.add(columnIndex); // hide column
     __.hiddenColumns = __.hiddenColumns;
   };
 
-  const addColumnHandler = (collIdx) => {
-    __.hiddenColumns.delete(collIdx);
-    __.hiddenColumns = __.hiddenColumns;
-  };
   const handleFilterTyping =
     (columnIndex) =>
     ({ currentTarget }) => {
@@ -211,21 +202,12 @@
     <thead>
       <TableCountsContainer {counts} bind:pageNow={__.pageNow} icons={icons.page} />
       <FilterContainer {columns} hiddenColumns={__.hiddenColumns} {stateFilter} {FILTER_ENUM} {handleFilterTyping} />
-
-      <tr class="table-columns-header">
-        {#each columns as colName, colI}
-          {#if __.hiddenColumns.has(colI) === false}
-            <th on:click={() => changeSortSettingsHandler(colName)}>
-              <span class="table-columns-header__element"
-                ><span>{colName}</span>
-                {#if __.sortedBy === colName}
-                  <span class="icon-sort material-symbols-outlined">{@html iconSymbolsByOrder[__.sortOrder]}</span>
-                {/if}</span
-              >
-            </th>
-          {/if}
-        {/each}
-      </tr>
+      <TableColumnHeader
+        {columns}
+        hiddenColumns={__.hiddenColumns}
+        bind:sortedBy={__.sortedBy}
+        bind:sortOrder={__.sortOrder}
+      />
     </thead>
     <tbody>
       {#each rowsPage as row}
@@ -251,12 +233,10 @@
     overflow-y: hidden;
     overflow-x: auto;
   }
-
   .component-table__container > * {
     margin-left: auto;
     margin-right: auto;
   }
-
   .component-table {
     /* table-layout: auto; */
     table-layout: fixed;
@@ -265,10 +245,6 @@
     white-space: nowrap;
     user-select: none;
     /* text-align: center; */
-  }
-  .component-table th {
-    user-select: none;
-    cursor: pointer;
   }
   .component-table td {
     user-select: text;
@@ -282,28 +258,10 @@
   :global(.component-table mark) {
     background-color: hsl(120deg 93% 88%);
   }
-
   .component-table tbody tr:nth-child(odd) {
     background-color: hsl(0, 0%, 97%);
   }
   .component-table tbody tr:hover {
     background-color: hsl(120deg 93% 88%);
-  }
-
-  .icon-sort {
-    margin-left: 2px;
-    margin-right: 2px;
-    vertical-align: bottom;
-    font-size: 20px;
-  }
-  .table-columns-header__element {
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-  }
-
-  .table-columns-header > th {
-    padding: 0.5em 0;
-    /* padding-right: 0.8em; */
   }
 </style>
