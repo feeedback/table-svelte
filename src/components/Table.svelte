@@ -2,6 +2,7 @@
   import { compareAB, createDebounceFn } from '../utils/utils.js';
   import ColumnsHideList from './ColumnsHideList.svelte';
   import TableCountsContainer from './TableCountsContainer.svelte';
+  import FilterContainer from './FilterContainer.svelte';
 
   import {
     iconSymbols as icons,
@@ -73,7 +74,7 @@
     updateFilter();
   };
 
-  const handleInputTyping = (colIdx, elem) => {
+  const handleFilterChange = (colIdx, elem) => {
     const newValue = elem.value.trim();
 
     if (newValue === '') {
@@ -170,7 +171,6 @@
   const hideColumnHandler = (colIdx) => {
     // reset filter by this column
     resetColumnFilter(colIdx);
-    console.log(__.pageNow);
     // reset sort by this column
     if (sortedByIndex === colIdx) {
       __.sortedBy = '';
@@ -184,6 +184,13 @@
     __.hiddenColumns.delete(collIdx);
     __.hiddenColumns = __.hiddenColumns;
   };
+  const handleFilterTyping =
+    (columnIndex) =>
+    ({ currentTarget }) => {
+      __.pageNow = 0; // reset selected page, when change filter
+
+      debounce(() => handleFilterChange(columnIndex, currentTarget));
+    };
 </script>
 
 <svelte:head>
@@ -203,25 +210,8 @@
   <table class="component-table">
     <thead>
       <TableCountsContainer {counts} bind:pageNow={__.pageNow} icons={icons.page} />
-      <tr>
-        {#each columns as colName, colI}
-          {#if __.hiddenColumns.has(colI) === false}
-            <th>
-              <input
-                class="filter-by-column"
-                on:input|capture={({ currentTarget }) => {
-                  __.pageNow = 0; // reset selected page, when change filter
+      <FilterContainer {columns} hiddenColumns={__.hiddenColumns} {stateFilter} {FILTER_ENUM} {handleFilterTyping} />
 
-                  debounce(() => handleInputTyping(colI, currentTarget));
-                }}
-                class:active-filter={stateFilter[colI] !== FILTER_ENUM.NULL}
-                class:active-filter-expression={stateFilter[colI].includes('EXPRESSION')}
-                class:bad-expression={stateFilter[colI] === FILTER_ENUM.INVALID_EXPRESSION}
-              />
-            </th>
-          {/if}
-        {/each}
-      </tr>
       <tr class="table-columns-header">
         {#each columns as colName, colI}
           {#if __.hiddenColumns.has(colI) === false}
@@ -250,41 +240,6 @@
 </div>
 
 <style>
-  @keyframes shake-little {
-    0%,
-    100% {
-      transform: translateX(0);
-    }
-    10%,
-    30%,
-    50%,
-    70% {
-      transform: translateX(-4px);
-    }
-    20%,
-    40%,
-    60% {
-      transform: translateX(4px);
-    }
-    80% {
-      transform: translateX(2px);
-    }
-    90% {
-      transform: translateX(-2px);
-    }
-  }
-  @keyframes shake-border-color {
-    0% {
-      border-color: hsl(0deg 54% 82%);
-    }
-    60% {
-      border-color: rgb(212, 89, 89);
-    }
-    100% {
-      border-color: hsl(0deg 54% 82%);
-    }
-  }
-
   .component-table__container {
     margin: 0 15px;
     font-family: monospace;
@@ -324,35 +279,8 @@
     /* width: 86px; */
     width: 130px;
   }
-
-  .component-table input {
-    line-height: normal;
-  }
-  .component-table input.filter-by-column {
-    text-align: center;
-    border: 2px solid #ddd;
-    font-style: italic;
-    width: calc(98% - 4px);
-  }
-  .component-table input.filter-by-column.active-filter {
-    border-color: hsl(120deg 35% 73%);
-  }
-  .component-table input.filter-by-column.active-filter-expression {
-    border-color: hsl(201deg 100% 79%);
-  }
-  .component-table input.filter-by-column.bad-expression {
-    border-color: hsl(0deg 54% 82%);
-  }
-  :global(input.shake) {
-    animation: shake-little 0.15s ease-out 0s 1 normal none;
-    /* shake-border-color 0.1s ease-out 0s 1 normal none; */
-  }
   :global(.component-table mark) {
     background-color: hsl(120deg 93% 88%);
-  }
-  .component-table input.filter-by-column.bad-expression:focus-visible,
-  .component-table input.filter-by-column.active-filter:focus-visible {
-    outline: none;
   }
 
   .component-table tbody tr:nth-child(odd) {
