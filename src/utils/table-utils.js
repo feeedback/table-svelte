@@ -91,8 +91,8 @@ export const iconSymbols = {
 };
 
 export const iconSymbolsByOrder = {
-  1: iconSymbols['sortAsc'],
-  '-1': iconSymbols['sortDesc'],
+  1: iconSymbols.sort.asc,
+  '-1': iconSymbols.sort.desc,
 };
 
 export const THIN_SPACE = '&#8239;';

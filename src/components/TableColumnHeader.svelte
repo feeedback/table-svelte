@@ -6,23 +6,23 @@
   export let sortedBy = '';
   export let sortOrder = 1;
 
-  const changeSortSettingsHandler = (fieldName) => {
-    if (sortedBy === fieldName) {
+  const changeSortSettingsHandler = (columnName) => {
+    if (sortedBy === columnName) {
       sortOrder *= -1;
     } else {
       sortOrder = 1;
     }
-    sortedBy = fieldName;
+    sortedBy = columnName;
   };
 </script>
 
 <tr class="table-columns-header__row">
-  {#each columns as colName, colI}
-    {#if hiddenColumns.has(colI) === false}
-      <th on:click={() => changeSortSettingsHandler(colName)} class="table-columns-header__cell">
+  {#each columns as columnName, columnIndex}
+    {#if hiddenColumns.has(columnIndex) === false}
+      <th on:click={() => changeSortSettingsHandler(columnName)} class="table-columns-header__cell">
         <span class="table-columns-header"
-          ><span>{colName}</span>
-          {#if sortedBy === colName}
+          ><span>{columnName}</span>
+          {#if sortedBy === columnName}
             <span class="table-columns-header__icon-sort material-symbols-outlined"
               >{@html iconSymbolsByOrder[sortOrder]}</span
             >
