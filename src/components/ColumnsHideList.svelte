@@ -17,11 +17,11 @@
           <div class="columns-list__button-box">
             {#if hiddenColumns.has(i)}
               <button class="add-column-button material-symbols-outlined" on:click={() => handlers.addColumn(i)}
-                >{@html icons.addColumn}</button
+                >{@html icons.add}</button
               >
             {:else}
               <button class="hide-column-button material-symbols-outlined" on:click={() => handlers.hideColumn(i)}
-                >{@html icons.hideColumn}</button
+                >{@html icons.hide}</button
               >
             {/if}
           </div>

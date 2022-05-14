@@ -1,8 +1,9 @@
 <script>
   import { compareAB, createDebounceFn } from '../utils/utils.js';
   import ColumnsHideList from './ColumnsHideList.svelte';
+  import CountsContainer from './CountsContainer.svelte';
+
   import {
-    THIN_SPACE,
     iconSymbols as icons,
     iconSymbolsByOrder,
     getExpressionCheckFn,
@@ -31,9 +32,6 @@
     ...settings,
   };
   // -----------------------
-
-  $: dataCount = data?.length;
-  $: columnsCount = columns.length - __.hiddenColumns.size;
 
   let cachedData = localStorage.getItem('tableData');
   if (!cachedData) {
@@ -116,6 +114,9 @@
   $: sortedByIndex = columns.indexOf(__.sortedBy);
 
   $: counts = {
+    rowsAll: data.length,
+    columnsShown: columns.length - __.hiddenColumns.size,
+
     page: {
       current: Math.min(__.pageNow + 1, Math.ceil(filteredCount / __.rowsPerPage)),
       total: Math.ceil(filteredCount / __.rowsPerPage),
@@ -169,7 +170,7 @@
   const hideColumnHandler = (colIdx) => {
     // reset filter by this column
     resetColumnFilter(colIdx);
-
+    console.log(__.pageNow);
     // reset sort by this column
     if (sortedByIndex === colIdx) {
       __.sortedBy = '';
@@ -197,54 +198,11 @@
     {columns}
     hiddenColumns={__.hiddenColumns}
     handlers={{ hideColumn: hideColumnHandler, addColumn: addColumnHandler }}
-    icons={{ addColumn: icons.addColumn, hideColumn: icons.hideColumn }}
+    icons={icons.column}
   />
   <table class="component-table">
     <thead>
-      <tr>
-        <td colspan={columnsCount} class="table-counts-container-td">
-          <div class="table-counts-container">
-            <div class="table-counts__count-fitered">
-              {counts.rows.currentStart}-{counts.rows.currentEnd} of{@html THIN_SPACE}<span
-                class="table-counts__count-filtered"
-              >
-                {counts.rows.filtered}</span
-              >
-              <span class="table-counts__count-total">({dataCount})</span>
-            </div>
-            <div class="count-page">
-              <button
-                class="icon-page material-symbols-outlined"
-                disabled={__.pageNow === 0}
-                on:click|capture|stopPropagation={() => {
-                  __.pageNow = 0;
-                }}>{@html icons.pageFirst}</button
-              ><button
-                class="icon-page material-symbols-outlined"
-                disabled={__.pageNow === 0}
-                on:click|capture|stopPropagation={() => {
-                  __.pageNow -= 1;
-                }}>{@html icons.pagePrev}</button
-              ><span class="count-page-text"
-                >Page: <span class="count-page-text-current">{counts.page.current}</span
-                >{@html `${THIN_SPACE}/${THIN_SPACE}`}{counts.page.total}</span
-              ><button
-                class="icon-page material-symbols-outlined"
-                disabled={__.pageNow >= counts.page.total - 1}
-                on:click|capture|stopPropagation={() => {
-                  __.pageNow += 1;
-                }}>{@html icons.pageNext}</button
-              ><button
-                class="icon-page material-symbols-outlined"
-                disabled={__.pageNow >= counts.page.total - 1}
-                on:click|capture|stopPropagation={() => {
-                  __.pageNow = counts.page.total - 1;
-                }}>{@html icons.pageLast}</button
-              >
-            </div>
-          </div>
-        </td>
-      </tr>
+      <CountsContainer {counts} bind:pageNow={__.pageNow} icons={icons.page} />
       <tr>
         {#each columns as colName, colI}
           {#if __.hiddenColumns.has(colI) === false}
@@ -327,10 +285,6 @@
     }
   }
 
-  button:focus {
-    border-color: #666;
-  }
-
   .component-table__container {
     margin: 0 15px;
     font-family: monospace;
@@ -347,32 +301,7 @@
     margin-left: auto;
     margin-right: auto;
   }
-  .component-table .table-counts-container-td {
-    padding: 0;
-    min-width: 32em;
-  }
-  .table-counts-container {
-    display: flex;
-    justify-content: space-between;
-    align-content: center;
-    align-items: center;
-    /* width: 80%; */
-    font-size: 17px;
-    margin-bottom: 4px;
-    /* font-family: 'Roboto'; */
-    vertical-align: middle;
-    height: 28px;
-  }
-  .table-counts__count-fitered {
-    display: flex;
-    align-items: center;
-    color: #989898;
-  }
-  .table-counts__count-total {
-    margin-left: 5px;
-    color: #aaa;
-    font-size: 16px;
-  }
+
   .component-table {
     /* table-layout: auto; */
     table-layout: fixed;
@@ -432,22 +361,7 @@
   .component-table tbody tr:hover {
     background-color: hsl(120deg 93% 88%);
   }
-  .count-page {
-    display: flex;
-    align-items: center;
-    column-gap: 7px;
-  }
-  .count-page-text {
-    width: 8.5em;
-    text-align: center;
-    color: #989898;
-  }
-  .count-page-text-current {
-    color: #000;
-  }
-  .table-counts__count-filtered {
-    color: #000;
-  }
+
   .icon-sort {
     margin-left: 2px;
     margin-right: 2px;
@@ -460,23 +374,6 @@
     align-items: flex-end;
   }
 
-  .icon-page {
-    font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 40;
-    padding: 0;
-    margin: 0;
-    border: 1px white solid;
-    border-radius: 3px;
-    background-color: #fbfbfb;
-    user-select: none;
-    cursor: pointer;
-  }
-  .icon-page:not([disabled]):hover {
-    border-color: rgb(220 220 220);
-  }
-  .icon-page:not([disabled]):active {
-    color: rgb(0, 0, 255);
-    background-color: white;
-  }
   .table-columns-header > th {
     padding: 0.5em 0;
     /* padding-right: 0.8em; */
