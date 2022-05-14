@@ -1,6 +1,7 @@
 <script>
-  export let counts = {};
   import { THIN_SPACE } from '../utils/table-utils.js';
+
+  export let counts = {};
 </script>
 
 <div class="table-counts__count-fitered">

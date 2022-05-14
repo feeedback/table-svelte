@@ -1,9 +1,10 @@
 <script>
+  import TableCounts from './TableCounts.svelte';
+  import PageNavigation from './PageNavigation.svelte';
+
   export let counts = {};
   export let icons = {};
   export let pageNow = 0;
-  import TableCounts from './TableCounts.svelte';
-  import PageNavigation from './PageNavigation.svelte';
 </script>
 
 <tr class="table-counts-container__row">

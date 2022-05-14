@@ -1,8 +1,9 @@
 <script>
+  import { THIN_SPACE } from '../utils/table-utils.js';
+
   export let counts = {};
   export let icons = {};
   export let pageNow = 0;
-  import { THIN_SPACE } from '../utils/table-utils.js';
 </script>
 
 <div class="page-navigation__container">
