@@ -2,21 +2,21 @@
   export let counts = {};
   export let icons = {};
   export let pageNow = 0;
-  import Counts from './Counts.svelte';
+  import TableCounts from './TableCounts.svelte';
   import PageNavigation from './PageNavigation.svelte';
 </script>
 
-<tr>
-  <td colspan={counts.columnsShown} class="table-counts-container-td">
+<tr class="table-counts-container__row">
+  <td colspan={counts.columnsShown} class="table-counts-container__cell">
     <div class="table-counts-container">
-      <Counts {counts} />
+      <TableCounts {counts} />
       <PageNavigation {counts} {icons} bind:pageNow />
     </div>
   </td>
 </tr>
 
 <style>
-  .table-counts-container-td {
+  .table-counts-container__cell {
     padding: 0;
     min-width: 32em;
   }

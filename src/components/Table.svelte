@@ -1,7 +1,7 @@
 <script>
   import { compareAB, createDebounceFn } from '../utils/utils.js';
   import ColumnsHideList from './ColumnsHideList.svelte';
-  import CountsContainer from './CountsContainer.svelte';
+  import TableCountsContainer from './TableCountsContainer.svelte';
 
   import {
     iconSymbols as icons,
@@ -202,7 +202,7 @@
   />
   <table class="component-table">
     <thead>
-      <CountsContainer {counts} bind:pageNow={__.pageNow} icons={icons.page} />
+      <TableCountsContainer {counts} bind:pageNow={__.pageNow} icons={icons.page} />
       <tr>
         {#each columns as colName, colI}
           {#if __.hiddenColumns.has(colI) === false}
