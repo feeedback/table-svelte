@@ -25,7 +25,7 @@
       hiddenColumns: new Set([]),
       rowsPerPage: 30,
       sortedBy: '',
-      startFilteringDebounceMs: 100,
+      startFilteringDebounceMs: 50,
       pageNow: 0,
       sortOrder: 1,
       debugFilterLog: false,
