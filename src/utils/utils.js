@@ -1,10 +1,8 @@
 /* eslint-disable eqeqeq */
 /* eslint-disable no-restricted-globals */
-export const getXDigits = (num, digit = 0) =>
-  num.toLocaleString('en-US', { maximumFractionDigits: digit });
+export const getXDigits = (num, digit = 0) => num.toLocaleString('en-US', { maximumFractionDigits: digit });
 
-export const getPercent = (num, digit = 0) =>
-  `${Math.round(num * 100 * 10 ** digit) / 10 ** digit}%`;
+export const getPercent = (num, digit = 0) => `${Math.round(num * 100 * 10 ** digit) / 10 ** digit}%`;
 
 // eslint-disable-next-line no-nested-ternary
 export const compareAB = (prev, next) => (prev < next ? -1 : prev > next ? 1 : 0);

@@ -163,11 +163,11 @@
     );
 
   const handlers = {
-    hideColumn: (columnIndex) => {
+    showColumn: (columnIndex) => {
       __.hiddenColumns.delete(columnIndex);
       __.hiddenColumns = __.hiddenColumns;
     },
-    addColumn: (columnIndex) => {
+    hideColumn: (columnIndex) => {
       resetColumnFilter(columnIndex); // reset filter by this column
 
       if (sortedByIndex === columnIndex) {
@@ -179,6 +179,7 @@
       __.hiddenColumns = __.hiddenColumns;
     },
   };
+  
   const handleFilterTyping =
     (columnIndex) =>
     ({ currentTarget }) => {

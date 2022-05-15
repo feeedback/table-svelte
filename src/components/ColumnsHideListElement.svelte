@@ -15,7 +15,7 @@
     {#if hiddenColumns.has(columnIndex)}
       <button
         class="columns-hide-list-element__add-column material-symbols-outlined"
-        on:click={() => handlers.addColumn(columnIndex)}>{@html icons.add}</button
+        on:click={() => handlers.showColumn(columnIndex)}>{@html icons.add}</button
       >
     {:else}
       <button
