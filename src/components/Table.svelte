@@ -57,8 +57,11 @@
 
   $: stateFilter = columns.map(() => FILTER_ENUM.NULL);
 
-  $: columnsShown = Object.entries(columns).filter(([index]) => !__.hiddenColumns.has(Number(index)));
+  $: columnsShown = Object.entries(columns)
+    .map(([index, name]) => [Number(index), name])
+    .filter(([index]) => !__.hiddenColumns.has(index));
 
+  let filterBindValues = [];
   let filtersRawValueByColIdx = [];
   let filtersExpFnByColIdx = [];
 
@@ -69,10 +72,12 @@
 
     filtersRawValueByColIdx = filtersRawValueByColIdx;
     filtersExpFnByColIdx = filtersExpFnByColIdx;
+    filterBindValues = filterBindValues;
   };
   const resetColumnFilter = (colIdx) => {
     filtersRawValueByColIdx[colIdx] = null;
     filtersExpFnByColIdx[colIdx] = null;
+    filterBindValues[colIdx] = '';
 
     updateFilter();
   };
@@ -179,10 +184,11 @@
       __.hiddenColumns = __.hiddenColumns;
     },
   };
-  
+
   const handleFilterTyping =
     (columnIndex) =>
     ({ currentTarget }) => {
+      filterBindValues[columnIndex] = currentTarget.value;
       __.pageNow = 0; // reset selected page, when change filter
 
       debounce(() => handleFilterChange(columnIndex, currentTarget));
@@ -202,7 +208,7 @@
   <table class="component-table">
     <thead>
       <TableCountsContainer {counts} bind:pageNow={__.pageNow} icons={icons.page} />
-      <FilterContainer {columnsShown} {stateFilter} {FILTER_ENUM} {handleFilterTyping} />
+      <FilterContainer {columnsShown} {stateFilter} {FILTER_ENUM} bind:filterBindValues {handleFilterTyping} />
       <TableColumnHeader {columnsShown} bind:sortedBy={__.sortedBy} bind:sortOrder={__.sortOrder} />
     </thead>
     <tbody>

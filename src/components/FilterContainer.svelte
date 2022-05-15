@@ -1,4 +1,5 @@
 <script>
+  export let filterBindValues;
   export let columnsShown = [];
   export let stateFilter = [];
   export let FILTER_ENUM = {};
@@ -10,6 +11,7 @@
     <th class="filter-container__cell">
       <input
         class="filter-container__input"
+        bind:value={filterBindValues[columnIndex]}
         on:input|capture={handleFilterTyping(columnIndex)}
         class:active-filter={stateFilter[columnIndex] !== FILTER_ENUM.NULL}
         class:active-filter-expression={stateFilter[columnIndex].includes('EXPRESSION')}
