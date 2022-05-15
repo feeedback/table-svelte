@@ -78,6 +78,7 @@
     filtersRawValueByColIdx[colIdx] = null;
     filtersExpFnByColIdx[colIdx] = null;
     filterBindValues[colIdx] = '';
+    stateFilter[colIdx] = FILTER_ENUM.NULL;
 
     updateFilter();
   };
