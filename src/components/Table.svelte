@@ -34,13 +34,18 @@
   };
   // -----------------------
 
-  let cachedData = localStorage.getItem('tableData');
-  if (!cachedData) {
-    localStorage.setItem('tableData', JSON.stringify(data));
+  let cached = {
+    data: localStorage.getItem('table.data'),
+    columns: localStorage.getItem('table.columns'),
+  };
+  if (!cached.data) {
+    localStorage.setItem('table.data', JSON.stringify(data));
+    localStorage.setItem('table.columns', JSON.stringify(columns));
   } else {
-    data = JSON.parse(cachedData);
+    data = JSON.parse(cached.data);
+    columns = JSON.parse(cached.columns);
   }
-  cachedData = undefined;
+  cached = undefined;
 
   const debounce = createDebounceFn(__.startFilteringDebounceMs);
 
