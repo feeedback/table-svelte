@@ -20,9 +20,9 @@
   export let data = [];
   export let columns = [];
   export let settings = {};
-  const __ = {
+  let __ = {
     ...{
-      hiddenColumns: new Set([]),
+      hiddenColumns: [],
       rowsPerPage: 30,
       sortedBy: '',
       startFilteringDebounceMs: 50,
@@ -37,13 +37,16 @@
   let cached = {
     data: localStorage.getItem('table.data'),
     columns: localStorage.getItem('table.columns'),
+    settings: localStorage.getItem('table.settings'),
   };
-  if (!cached.data) {
+  if (!cached.data || !cached.columns) {
     localStorage.setItem('table.data', JSON.stringify(data));
     localStorage.setItem('table.columns', JSON.stringify(columns));
+    localStorage.setItem('table.settings', JSON.stringify(__));
   } else {
     data = JSON.parse(cached.data);
     columns = JSON.parse(cached.columns);
+    __ = JSON.parse(cached.settings);
   }
   cached = undefined;
 
@@ -64,7 +67,7 @@
 
   $: columnsShown = Object.entries(columns)
     .map(([index, name]) => [Number(index), name])
-    .filter(([index]) => !__.hiddenColumns.has(index));
+    .filter(([index]) => !__.hiddenColumns.includes(index));
 
   let filterBindValues = [];
   let filtersRawValueByColIdx = [];
@@ -170,12 +173,12 @@
     .map((doc) =>
       doc
         .map((val, i) => highlightQueryInFiltered(filtersRawValueByColIdx[i], val))
-        .filter((v, index) => !__.hiddenColumns.has(index))
+        .filter((v, index) => !__.hiddenColumns.includes(index))
     );
 
   const handlers = {
     showColumn: (columnIndex) => {
-      __.hiddenColumns.delete(columnIndex);
+      __.hiddenColumns.splice(__.hiddenColumns.indexOf(columnIndex), 1);
       __.hiddenColumns = __.hiddenColumns;
     },
     hideColumn: (columnIndex) => {
@@ -186,7 +189,7 @@
         __.sortedBy = '';
       }
 
-      __.hiddenColumns.add(columnIndex); // hide column
+      __.hiddenColumns.push(columnIndex); // hide column
       __.hiddenColumns = __.hiddenColumns;
     },
   };

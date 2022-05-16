@@ -2,7 +2,7 @@
   import ColumnsHideListElement from './ColumnsHideListElement.svelte';
 
   export let columns = [];
-  export let hiddenColumns = new Set();
+  export let hiddenColumns = [];
   export let handlers = {};
   export let icons = {};
 </script>

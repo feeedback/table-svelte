@@ -9,7 +9,7 @@
   {data}
   {columns}
   settings={{
-    hiddenColumns: new Set([columns.indexOf('Description')]),
+    hiddenColumns: [columns.indexOf('Description')],
     rowsPerPage: 25,
     sortedBy: 'Name',
     // startFilteringDebounceMs: 100,

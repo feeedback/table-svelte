@@ -1,18 +1,21 @@
 <script>
   export let columnName = '';
   export let columnIndex = 0;
-  export let hiddenColumns = new Set();
+  export let hiddenColumns = [];
   export let handlers = {};
   export let icons = {};
 </script>
 
 <div class="columns-hide-list-element">
-  <div class="columns-hide-list-element__name-box" class:columns-list__name_hidden={hiddenColumns.has(columnIndex)}>
+  <div
+    class="columns-hide-list-element__name-box"
+    class:columns-list__name_hidden={hiddenColumns.includes(columnIndex)}
+  >
     <span class="columns-hide-list-element__name" title={columnName}>{columnName}</span>
   </div>
 
   <div class="columns-hide-list-element__button-box">
-    {#if hiddenColumns.has(columnIndex)}
+    {#if hiddenColumns.includes(columnIndex)}
       <button
         class="columns-hide-list-element__add-column material-symbols-outlined"
         on:click={() => handlers.showColumn(columnIndex)}>{@html icons.add}</button
