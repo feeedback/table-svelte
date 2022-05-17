@@ -3,28 +3,16 @@
   import { onMount } from 'svelte';
   import { iconSymbolsByOrder } from '../utils/table-utils.js';
 
-  export let saveSortSettings;
   export let columnsShown = {};
+  export let changeSortSettingsHandler;
   export let sortedBy = '';
   export let sortOrder = 1;
-  export let pageNow;
-
   let isFirst = true;
   onMount(() => {
     setTimeout(() => {
       isFirst = false;
     }, 200);
   });
-  const changeSortSettingsHandler = (columnName) => {
-    if (sortedBy === columnName) {
-      sortOrder *= -1;
-    } else {
-      sortOrder = 1;
-    }
-    sortedBy = columnName;
-    pageNow = 0;
-    saveSortSettings();
-  };
 </script>
 
 <tr class="table-columns-header__row">

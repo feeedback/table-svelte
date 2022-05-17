@@ -201,6 +201,17 @@
 
       debounce(() => handleFilterChange(columnIndex, currentTarget));
     };
+
+  const changeSortSettingsHandler = (columnName) => {
+    if (__.sortedBy === columnName) {
+      __.sortOrder *= -1;
+    } else {
+      __.sortOrder = 1;
+    }
+    __.sortedBy = columnName;
+    __.pageNow = 0;
+    saveSortSettings();
+  };
 </script>
 
 <svelte:head>
@@ -224,13 +235,7 @@
         bind:filterBindValues={filter.bindValues}
         {handleFilterTyping}
       />
-      <TableColumnHeader
-        {saveSortSettings}
-        {columnsShown}
-        bind:pageNow={__.pageNow}
-        bind:sortedBy={__.sortedBy}
-        bind:sortOrder={__.sortOrder}
-      />
+      <TableColumnHeader {columnsShown} {changeSortSettingsHandler} sortedBy={__.sortedBy} sortOrder={__.sortOrder} />
     </thead>
     <tbody>
       {#each rowsPage as row}

@@ -4,6 +4,14 @@
   export let counts = {};
   export let icons = {};
   export let pageNow = 0;
+  export let isHighlightPageNow = false;
+  $: {
+    if (pageNow === 0) {
+      isHighlightPageNow = true;
+    } else {
+      isHighlightPageNow = false;
+    }
+  }
 </script>
 
 <div class="page-navigation__container">
@@ -20,7 +28,8 @@
       pageNow -= 1;
     }}>{@html icons.prev}</button
   ><span class="page-navigation__text"
-    >Page: <span class="page-navigation__count-current-page">{counts.page.current}</span
+    >Page: <span class="page-navigation__count-current-page" class:colorHighlight={isHighlightPageNow}
+      >{counts.page.current}</span
     >{@html `${THIN_SPACE}/${THIN_SPACE}`}{counts.page.total}</span
   ><button
     class="page-navigation__button material-symbols-outlined"
@@ -38,6 +47,14 @@
 </div>
 
 <style>
+  @keyframes color-highlight {
+    0% {
+      background-color: rgba(0, 255, 8, 0.25);
+    }
+    100% {
+      background-color: white;
+    }
+  }
   .page-navigation__container > button:focus {
     border-color: #666;
   }
@@ -74,5 +91,8 @@
   .page-navigation__button:not([disabled]):active {
     color: rgb(0, 0, 255);
     background-color: white;
+  }
+  .page-navigation__count-current-page.colorHighlight {
+    animation: color-highlight 1s ease-out 0s 1 normal none;
   }
 </style>
