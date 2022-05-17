@@ -1,9 +1,19 @@
 <script>
+  // eslint-disable-next-line import/no-extraneous-dependencies
+  import { onMount } from 'svelte';
+
   export let columnName = '';
   export let columnIndex = 0;
   export let hiddenColumns = [];
   export let handlers = {};
   export let icons = {};
+
+  let isFirst = true;
+  onMount(() => {
+    setTimeout(() => {
+      isFirst = false;
+    }, 200);
+  });
 </script>
 
 <div class="columns-hide-list-element">
@@ -18,11 +28,13 @@
     {#if hiddenColumns.includes(columnIndex)}
       <button
         class="columns-hide-list-element__add-column material-symbols-outlined"
+        class:animation-loading={isFirst}
         on:click={() => handlers.showColumn(columnIndex)}>{@html icons.add}</button
       >
     {:else}
       <button
         class="columns-hide-list-element__hide-column material-symbols-outlined"
+        class:animation-loading={isFirst}
         on:click={() => handlers.hideColumn(columnIndex)}>{@html icons.hide}</button
       >
     {/if}
@@ -58,6 +70,8 @@
     cursor: pointer;
     height: 26px;
     width: 26px;
+  }
+  .animation-loading {
     animation: opactity-during-loading-font 0.8s;
   }
   .columns-hide-list-element:hover button {
@@ -92,8 +106,9 @@
   }
   .columns-list__name_hidden {
     text-decoration: line-through;
-    color: #b7b7b7;
-    text-decoration-thickness: 1px;
+    /* color: #b7b7b7; */
+    color: #a3a3a3;
+    text-decoration-thickness: 2px;
     text-decoration-color: rgba(225, 128, 128, 0.486);
     /* text-decoration-style: double; */
   }

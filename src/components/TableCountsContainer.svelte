@@ -27,7 +27,7 @@
     align-content: center;
     align-items: center;
     /* width: 80%; */
-    font-size: 17px;
+    font-size: 18px;
     margin-bottom: 4px;
     /* font-family: 'Roboto'; */
     vertical-align: middle;

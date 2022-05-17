@@ -241,11 +241,12 @@
 <style>
   @keyframes -global-opactity-during-loading-font {
     0% {
-      opacity: 0.6;
+      opacity: 0.4;
       color: rgba(0, 0, 0, 0.01);
     }
-    20% {
+    30% {
       opacity: 0.6;
+      /* color: rgba(0, 0, 0, 0.4); */
     }
     100% {
       opacity: 1;
@@ -259,6 +260,7 @@
     font-size: 18px;
     margin-left: auto;
     margin-right: auto;
+    margin-top: 8px;
     width: calc(100% - 30px - 6%);
     overflow-y: hidden;
     overflow-x: auto;

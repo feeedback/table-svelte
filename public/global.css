@@ -31,6 +31,16 @@ textarea {
   border: 1px solid #ccc;
   border-radius: 2px;
 }
+
+button {
+  color: #333;
+  background-color: #f6f6f6;
+}
+
+button:disabled {
+  color: #aaa;
+}
+
 button:focus {
   border-color: #666;
 }

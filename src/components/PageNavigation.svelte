@@ -65,6 +65,7 @@
     cursor: pointer;
     height: 26px;
     width: 26px;
+    /* color: #333; */
     animation: opactity-during-loading-font 0.8s;
   }
   .page-navigation__button:not([disabled]):hover {

@@ -5,9 +5,8 @@
 </script>
 
 <div class="table-counts__count-fitered">
-  {counts.rows.currentStart}-{counts.rows.currentEnd} of{@html THIN_SPACE}<span class="table-counts__count-filtered">
-    {counts.rows.filtered}</span
-  >
+  <span class="table-counts__rows-shown">{counts.rows.currentStart}-{counts.rows.currentEnd}</span
+  >{@html THIN_SPACE}of{@html THIN_SPACE}<span class="table-counts__count-filtered"> {counts.rows.filtered}</span>
   <span class="table-counts__count-total">({counts.rowsAll})</span>
 </div>
 
@@ -15,7 +14,10 @@
   .table-counts__count-fitered {
     display: flex;
     align-items: center;
-    color: #989898;
+    color: rgb(152, 152, 152);
+  }
+  .table-counts__rows-shown {
+    color: rgb(66, 66, 66);
   }
   .table-counts__count-total {
     margin-left: 5px;

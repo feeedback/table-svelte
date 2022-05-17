@@ -8,7 +8,7 @@
 </script>
 
 <div class="columns-hide-list__container">
-  <details open>
+  <details>
     <summary class="columns-hide-list__header">Columns</summary>
     <div class="columns-hide-list__list">
       {#each columns as columnName, columnIndex}
@@ -47,7 +47,7 @@
     padding-left: 1em;
     padding-right: 0.8em;
     padding-bottom: 0.5em;
-    font-size: 19px;
+    font-size: 20px;
     margin: 0;
     margin-top: 1em;
     font-family: 'Roboto';
