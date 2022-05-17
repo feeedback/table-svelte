@@ -58,6 +58,7 @@
     cursor: pointer;
     height: 26px;
     width: 26px;
+    animation: opactity-during-loading-font 0.8s;
   }
   .columns-hide-list-element:hover button {
     font-variation-settings: 'FILL' 0, 'wght' 700, 'GRAD' 200, 'opsz' 40;

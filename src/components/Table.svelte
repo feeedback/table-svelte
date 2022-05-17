@@ -239,6 +239,19 @@
 </div>
 
 <style>
+  @keyframes -global-opactity-during-loading-font {
+    0% {
+      opacity: 0.6;
+      color: rgba(0, 0, 0, 0.01);
+    }
+    20% {
+      opacity: 0.6;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
   .component-table__container {
     margin: 0 15px;
     font-family: monospace;

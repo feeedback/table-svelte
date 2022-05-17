@@ -46,6 +46,7 @@
     font-size: 20px;
     width: 20px;
     height: 20px;
+    animation: opactity-during-loading-font 0.8s;
   }
   .table-columns-header {
     display: flex;
