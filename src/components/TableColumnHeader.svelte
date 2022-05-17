@@ -1,6 +1,7 @@
 <script>
   import { iconSymbolsByOrder } from '../utils/table-utils.js';
 
+  export let saveSortSettings;
   export let columnsShown = {};
   export let sortedBy = '';
   export let sortOrder = 1;
@@ -12,6 +13,7 @@
       sortOrder = 1;
     }
     sortedBy = columnName;
+    saveSortSettings()
   };
 </script>
 

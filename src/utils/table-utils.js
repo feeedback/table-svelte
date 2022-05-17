@@ -30,25 +30,29 @@ export const parseOneExpression = (expression) => {
 
 export const parseExpression = (expressionRaw) => {
   const expression = expressionRaw.replace(/\s/g, '');
-  const conditions = expression.split('&');
-  const count = conditions.length;
+  const parts = expression.split('&');
+  const count = parts.length;
 
-  const parsed = conditions.map((cond) => parseOneExpression(cond));
-
-  if (count > 1 && parsed.some((exp) => exp && exp.mark === '=')) {
+  const parsedConditions = parts.map((cond) => parseOneExpression(cond));
+  if (count > 1) {
+    if (parsedConditions.some((exp) => exp && exp.mark === '=')) {
+      return null;
+    }
+    if (parts.filter((exp) => exp === '').length > 1) {
+      return null;
+    }
+    if (parts.at(-1) === '') {
+      return parsedConditions.slice(0, -1);
+    }
+  }
+  if (parsedConditions.includes(null)) {
     return null;
   }
-  if (count > 1 && conditions.at(-1) === '') {
-    return parsed.slice(0, -1);
-  }
-  if (parsed.includes(null)) {
-    return null;
-  }
-  if (count > 1 && conditions.at(-1).pivotValue === '') {
-    return parsed.slice(0, -1);
+  if (count > 1 && parsedConditions.at(-1).pivotValue === '') {
+    return parsedConditions.slice(0, -1);
   }
 
-  return parsed;
+  return parsedConditions;
 };
 
 export const isExpression = (str) => str && /^[>=<]/.test(str);
@@ -116,4 +120,49 @@ export const highlightQueryInFiltered = (queryValue, value) => {
     '</mark>',
     strValue.slice(queryEnd),
   ].join('');
+};
+
+export const FILTER_ENUM = {
+  NULL: 'NULL',
+  STRING: 'STRING',
+  EXPRESSION: 'EXPRESSION',
+  EMPTY_EXPRESSION: 'EMPTY_EXPRESSION',
+  VALID_EXPRESSION: 'VALID_EXPRESSION',
+  INVALID_EXPRESSION: 'INVALID_EXPRESSION',
+};
+
+export const saveLoadSettingsCache = ({ data, columns, filter, settings }) => {
+  const cache = {
+    data: localStorage.getItem('table.data'),
+    columns: localStorage.getItem('table.columns'),
+    settings: localStorage.getItem('table.settings'),
+    filter: localStorage.getItem('table.filter'),
+  };
+
+  if (!cache.data || !cache.columns) {
+    localStorage.setItem('table.data', JSON.stringify(data));
+    localStorage.setItem('table.columns', JSON.stringify(columns));
+    localStorage.setItem('table.settings', JSON.stringify(settings));
+    localStorage.setItem('table.filter', JSON.stringify(filter));
+    return { data, columns, filter, settings };
+  }
+
+  cache.data = JSON.parse(cache.data);
+  cache.columns = JSON.parse(cache.columns);
+  cache.settings = cache.settings ? { ...JSON.parse(cache.settings), pageNow: 0 } : settings;
+  cache.filter = cache.filter ? JSON.parse(cache.filter) : filter;
+
+  Object.keys(cache.filter.expFnByColumnIdx).forEach((colIdx) => {
+    if (cache.filter.state[colIdx] === FILTER_ENUM.VALID_EXPRESSION) {
+      cache.filter.expFnByColumnIdx[colIdx] = getExpressionCheckFn(
+        parseExpression(cache.filter.rawValueByColumnIdx[colIdx])
+      );
+    } else if (cache.filter.state[colIdx] === FILTER_ENUM.INVALID_EXPRESSION) {
+      cache.filter.state[colIdx] = FILTER_ENUM.NULL;
+      cache.filter.rawValueByColumnIdx[colIdx] = null;
+      cache.filter.expFnByColumnIdx[colIdx] = null;
+    }
+  });
+
+  return cache;
 };

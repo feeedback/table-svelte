@@ -14,6 +14,8 @@
     isValidExpression,
     animateFilterBadExpression,
     highlightQueryInFiltered,
+    FILTER_ENUM,
+    saveLoadSettingsCache,
   } from '../utils/table-utils.js';
 
   // -------- props --------
@@ -24,69 +26,61 @@
     ...{
       hiddenColumns: [],
       rowsPerPage: 30,
-      sortedBy: '',
-      startFilteringDebounceMs: 50,
       pageNow: 0,
+      sortedBy: '',
       sortOrder: 1,
+      startFilteringDebounceMs: 50,
       debugFilterLog: false,
     },
     ...settings,
   };
   // -----------------------
-
-  let cached = {
-    data: localStorage.getItem('table.data'),
-    columns: localStorage.getItem('table.columns'),
-    settings: localStorage.getItem('table.settings'),
-  };
-  if (!cached.data || !cached.columns) {
-    localStorage.setItem('table.data', JSON.stringify(data));
-    localStorage.setItem('table.columns', JSON.stringify(columns));
-    localStorage.setItem('table.settings', JSON.stringify(__));
-  } else {
-    data = JSON.parse(cached.data);
-    columns = JSON.parse(cached.columns);
-    __ = JSON.parse(cached.settings);
-  }
-  cached = undefined;
-
   const debounce = createDebounceFn(__.startFilteringDebounceMs);
-
-  const FILTER_ENUM = {
-    NULL: 'NULL',
-
-    STRING: 'STRING',
-
-    EXPRESSION: 'EXPRESSION',
-    EMPTY_EXPRESSION: 'EMPTY_EXPRESSION',
-    VALID_EXPRESSION: 'VALID_EXPRESSION',
-    INVALID_EXPRESSION: 'INVALID_EXPRESSION',
-  };
-
-  $: stateFilter = columns.map(() => FILTER_ENUM.NULL);
 
   $: columnsShown = Object.entries(columns)
     .map(([index, name]) => [Number(index), name])
     .filter(([index]) => !__.hiddenColumns.includes(index));
 
-  let filterBindValues = [];
-  let filtersRawValueByColIdx = [];
-  let filtersExpFnByColIdx = [];
+  let filter = {
+    state: columns.map(() => FILTER_ENUM.NULL),
+    bindValues: new Array(columns.length).fill(null),
+    rawValueByColumnIdx: new Array(columns.length).fill(null),
+    expFnByColumnIdx: new Array(columns.length).fill(null),
+  };
+
+  let cache = saveLoadSettingsCache({ data, columns, filter, settings:__ });
+  data = cache.data;
+  columns = cache.columns;
+  __ = cache.settings;
+  filter = cache.filter;
+  cache = undefined;
+
+  const saveColumnSettings = () => {
+    localStorage.setItem('table.settings', JSON.stringify(__));
+  };
+  const saveSortSettings = () => {
+    localStorage.setItem('table.settings', JSON.stringify(__));
+  };
+  const saveFilterSettings = () => {
+    localStorage.setItem('table.filter', JSON.stringify(filter));
+  };
 
   const updateFilter = () => {
     if (__.debugFilterLog) {
-      console.log(stateFilter);
+      console.log(filter.state);
     }
+    filter.rawValueByColumnIdx = filter.rawValueByColumnIdx;
+    filter.expFnByColumnIdx = filter.expFnByColumnIdx;
+    filter.bindValues = filter.bindValues;
+    filter.state = filter.state;
 
-    filtersRawValueByColIdx = filtersRawValueByColIdx;
-    filtersExpFnByColIdx = filtersExpFnByColIdx;
-    filterBindValues = filterBindValues;
+    saveFilterSettings();
   };
   const resetColumnFilter = (colIdx) => {
-    filtersRawValueByColIdx[colIdx] = null;
-    filtersExpFnByColIdx[colIdx] = null;
-    filterBindValues[colIdx] = '';
-    stateFilter[colIdx] = FILTER_ENUM.NULL;
+    filter.rawValueByColumnIdx[colIdx] = null;
+    filter.expFnByColumnIdx[colIdx] = null;
+    filter.bindValues[colIdx] = '';
+    filter.state[colIdx] = FILTER_ENUM.NULL;
 
     updateFilter();
   };
@@ -95,7 +89,7 @@
     const newValue = elem.value.trim();
 
     if (newValue === '') {
-      stateFilter[colIdx] = FILTER_ENUM.NULL;
+      filter.state[colIdx] = FILTER_ENUM.NULL;
       resetColumnFilter(colIdx);
       return;
     }
@@ -103,29 +97,31 @@
     const isThisExpression = isExpression(newValue);
 
     if (!isThisExpression) {
-      stateFilter[colIdx] = FILTER_ENUM.STRING;
-      filtersRawValueByColIdx[colIdx] = newValue;
-      filtersExpFnByColIdx[colIdx] = null;
+      filter.state[colIdx] = FILTER_ENUM.STRING;
+      filter.rawValueByColumnIdx[colIdx] = newValue;
+      filter.expFnByColumnIdx[colIdx] = null;
 
       updateFilter();
       return;
     }
 
-    stateFilter[colIdx] = FILTER_ENUM.EXPRESSION;
-    filtersRawValueByColIdx[colIdx] = newValue.replace(/\s/g, '');
+    filter.state[colIdx] = FILTER_ENUM.EXPRESSION;
+    filter.rawValueByColumnIdx[colIdx] = newValue.replace(/\s/g, '');
 
     if (isEmptyExpression(newValue)) {
-      stateFilter[colIdx] = FILTER_ENUM.EMPTY_EXPRESSION;
+      filter.state[colIdx] = FILTER_ENUM.EMPTY_EXPRESSION;
       //
     } else if (isValidExpression(newValue)) {
-      stateFilter[colIdx] = FILTER_ENUM.VALID_EXPRESSION;
-      filtersExpFnByColIdx[colIdx] = getExpressionCheckFn(parseExpression(newValue));
+      filter.state[colIdx] = FILTER_ENUM.VALID_EXPRESSION;
+      filter.expFnByColumnIdx[colIdx] = getExpressionCheckFn(parseExpression(newValue));
       //
     } else {
-      stateFilter[colIdx] = FILTER_ENUM.INVALID_EXPRESSION;
-      animateFilterBadExpression(elem);
+      filter.state[colIdx] = FILTER_ENUM.INVALID_EXPRESSION;
     }
 
+    if (filter.state[colIdx] === FILTER_ENUM.INVALID_EXPRESSION) {
+      animateFilterBadExpression(elem);
+    }
     updateFilter();
   };
 
@@ -147,14 +143,14 @@
   };
 
   $: fnFilteringDoc = (doc) =>
-    Object.entries(filtersRawValueByColIdx)
+    Object.entries(filter.rawValueByColumnIdx)
       .filter(([k, v]) => v !== null)
       .every(([colIdx, filterValue]) => {
-        if (stateFilter[colIdx] === FILTER_ENUM.EMPTY_EXPRESSION) {
+        if (filter.state[colIdx] === FILTER_ENUM.EMPTY_EXPRESSION) {
           return true;
         }
 
-        const filterExpFn = filtersExpFnByColIdx[colIdx];
+        const filterExpFn = filter.expFnByColumnIdx[colIdx];
         if (filterExpFn) {
           return filterExpFn(Number(doc[colIdx]));
         }
@@ -172,7 +168,7 @@
     .slice(counts.rows.currentStart, counts.rows.currentEnd)
     .map((doc) =>
       doc
-        .map((val, i) => highlightQueryInFiltered(filtersRawValueByColIdx[i], val))
+        .map((val, i) => highlightQueryInFiltered(filter.rawValueByColumnIdx[i], val))
         .filter((v, index) => !__.hiddenColumns.includes(index))
     );
 
@@ -180,6 +176,7 @@
     showColumn: (columnIndex) => {
       __.hiddenColumns.splice(__.hiddenColumns.indexOf(columnIndex), 1);
       __.hiddenColumns = __.hiddenColumns;
+      saveColumnSettings();
     },
     hideColumn: (columnIndex) => {
       resetColumnFilter(columnIndex); // reset filter by this column
@@ -191,13 +188,15 @@
 
       __.hiddenColumns.push(columnIndex); // hide column
       __.hiddenColumns = __.hiddenColumns;
+      saveColumnSettings();
     },
   };
 
   const handleFilterTyping =
     (columnIndex) =>
     ({ currentTarget }) => {
-      filterBindValues[columnIndex] = currentTarget.value;
+      filter.bindValues[columnIndex] = currentTarget.value;
+      filter.bindValues = filter.bindValues;
       __.pageNow = 0; // reset selected page, when change filter
 
       debounce(() => handleFilterChange(columnIndex, currentTarget));
@@ -217,8 +216,14 @@
   <table class="component-table">
     <thead>
       <TableCountsContainer {counts} bind:pageNow={__.pageNow} icons={icons.page} />
-      <FilterContainer {columnsShown} {stateFilter} {FILTER_ENUM} bind:filterBindValues {handleFilterTyping} />
-      <TableColumnHeader {columnsShown} bind:sortedBy={__.sortedBy} bind:sortOrder={__.sortOrder} />
+      <FilterContainer
+        {columnsShown}
+        stateFilter={filter.state}
+        {FILTER_ENUM}
+        bind:filterBindValues={filter.bindValues}
+        {handleFilterTyping}
+      />
+      <TableColumnHeader {saveSortSettings} {columnsShown} bind:sortedBy={__.sortedBy} bind:sortOrder={__.sortOrder} />
     </thead>
     <tbody>
       {#each rowsPage as row}
