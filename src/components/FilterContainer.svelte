@@ -11,6 +11,7 @@
     <th class="filter-container__cell">
       <input
         class="filter-container__input"
+        aria-label={`filter by ${columnName}`}
         bind:value={filterBindValues[columnIndex]}
         on:input|capture={handleFilterTyping(columnIndex)}
         class:active-filter={stateFilter[columnIndex] !== FILTER_ENUM.NULL}

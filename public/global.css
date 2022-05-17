@@ -38,7 +38,7 @@ button {
 }
 
 button:disabled {
-  color: #aaa;
+  color: #bbb;
 }
 
 button:focus {

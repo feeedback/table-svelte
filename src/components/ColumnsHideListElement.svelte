@@ -108,8 +108,10 @@
     text-decoration: line-through;
     /* color: #b7b7b7; */
     color: #a3a3a3;
+    /* color: #757777; */
     text-decoration-thickness: 2px;
-    text-decoration-color: rgba(225, 128, 128, 0.486);
+    /* text-decoration-color: rgba(225, 128, 128, 0.486); */
+    text-decoration-color: rgba(225, 128, 128, 0.6);
     /* text-decoration-style: double; */
   }
 </style>

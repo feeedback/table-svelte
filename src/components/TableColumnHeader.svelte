@@ -7,6 +7,7 @@
   export let columnsShown = {};
   export let sortedBy = '';
   export let sortOrder = 1;
+  export let pageNow;
 
   let isFirst = true;
   onMount(() => {
@@ -21,8 +22,8 @@
       sortOrder = 1;
     }
     sortedBy = columnName;
+    pageNow = 0;
     saveSortSettings();
-    document.querySelector('.table-columns-header__icon-sort').style.animation = 'none';
   };
 </script>
 

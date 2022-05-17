@@ -224,7 +224,13 @@
         bind:filterBindValues={filter.bindValues}
         {handleFilterTyping}
       />
-      <TableColumnHeader {saveSortSettings} {columnsShown} bind:sortedBy={__.sortedBy} bind:sortOrder={__.sortOrder} />
+      <TableColumnHeader
+        {saveSortSettings}
+        {columnsShown}
+        bind:pageNow={__.pageNow}
+        bind:sortedBy={__.sortedBy}
+        bind:sortOrder={__.sortOrder}
+      />
     </thead>
     <tbody>
       {#each rowsPage as row}
