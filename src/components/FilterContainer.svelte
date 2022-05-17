@@ -17,7 +17,7 @@
         class:active-filter={stateFilter[columnIndex] !== FILTER_ENUM.NULL}
         class:active-filter-expression={stateFilter[columnIndex].includes('EXPRESSION')}
         class:bad-expression={stateFilter[columnIndex] === FILTER_ENUM.INVALID_EXPRESSION}
-        class:shake={false}
+        class:shake={stateFilter[columnIndex] === FILTER_ENUM.INVALID_EXPRESSION}
       />
     </th>
   {/each}

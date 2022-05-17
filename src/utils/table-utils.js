@@ -63,19 +63,6 @@ export const isValidExpression = (exp) => isExpression(exp) && !isInvalidExpress
 export const getExpressionCheckFn = (exp) => (queryValue) =>
   exp.every(({ mark, pivotValue }) => mapMarkToFn[mark](pivotValue)(queryValue));
 
-export const animateFilterBadExpression = (elem, conditionalFn = () => true) => {
-  const SHAKE_CLASS = 'shake';
-
-  if (conditionalFn()) {
-    elem.classList.remove(SHAKE_CLASS);
-    // eslint-disable-next-line no-void
-    void elem.offsetWidth;
-    elem.classList.add(SHAKE_CLASS);
-  } else {
-    elem.classList.remove(SHAKE_CLASS);
-  }
-};
-
 export const iconSymbols = {
   sort: {
     asc: '&#x' + 'e5d8;', // e5d8 e5c7 ↑ ▲

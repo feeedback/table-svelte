@@ -12,7 +12,6 @@
     parseExpression,
     isEmptyExpression,
     isValidExpression,
-    animateFilterBadExpression,
     highlightQueryInFiltered,
     FILTER_ENUM,
     saveLoadSettingsCache,
@@ -119,9 +118,6 @@
       filter.state[colIdx] = FILTER_ENUM.INVALID_EXPRESSION;
     }
 
-    if (filter.state[colIdx] === FILTER_ENUM.INVALID_EXPRESSION) {
-      animateFilterBadExpression(elem);
-    }
     updateFilter();
   };
 
