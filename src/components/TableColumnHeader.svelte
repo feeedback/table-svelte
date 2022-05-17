@@ -13,7 +13,7 @@
       sortOrder = 1;
     }
     sortedBy = columnName;
-    saveSortSettings()
+    saveSortSettings();
   };
 </script>
 
@@ -44,6 +44,8 @@
     margin-right: 2px;
     vertical-align: bottom;
     font-size: 20px;
+    width: 20px;
+    height: 20px;
   }
   .table-columns-header {
     display: flex;

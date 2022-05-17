@@ -48,7 +48,7 @@
     expFnByColumnIdx: new Array(columns.length).fill(null),
   };
 
-  let cache = saveLoadSettingsCache({ data, columns, filter, settings:__ });
+  let cache = saveLoadSettingsCache({ data, columns, filter, settings: __ });
   data = cache.data;
   columns = cache.columns;
   __ = cache.settings;
@@ -204,10 +204,11 @@
 </script>
 
 <svelte:head>
-  <link
+  <link rel="stylesheet" href="./static/Material_Symbols_Outlined.css" />
+  <!-- <link
     rel="stylesheet"
     href="https://fonts.sandbox.google.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,300..700,0..1,0..200"
-  />
+  /> -->
 </svelte:head>
 
 <div class="component-table__container">

@@ -63,6 +63,8 @@
     background-color: #fbfbfb;
     user-select: none;
     cursor: pointer;
+    height: 26px;
+    width: 26px;
   }
   .page-navigation__button:not([disabled]):hover {
     border-color: rgb(220 220 220);

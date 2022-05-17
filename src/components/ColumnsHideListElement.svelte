@@ -39,6 +39,11 @@
     margin-bottom: 4px;
   } */
 
+  .columns-hide-list-element__button-box {
+    overflow: hidden;
+    height: 26px;
+    width: 26px;
+  }
   .columns-hide-list-element button {
     font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 40;
     text-align: center;
@@ -51,6 +56,8 @@
     border-radius: 2px;
     user-select: none;
     cursor: pointer;
+    height: 26px;
+    width: 26px;
   }
   .columns-hide-list-element:hover button {
     font-variation-settings: 'FILL' 0, 'wght' 700, 'GRAD' 200, 'opsz' 40;

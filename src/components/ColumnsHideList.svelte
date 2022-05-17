@@ -8,7 +8,7 @@
 </script>
 
 <div class="columns-hide-list__container">
-  <details>
+  <details open>
     <summary class="columns-hide-list__header">Columns</summary>
     <div class="columns-hide-list__list">
       {#each columns as columnName, columnIndex}
@@ -51,5 +51,8 @@
     margin: 0;
     margin-top: 1em;
     font-family: 'Roboto';
+    display: flex;
+    flex-direction: column;
+    row-gap: 2px;
   }
 </style>
