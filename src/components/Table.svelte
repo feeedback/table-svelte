@@ -64,24 +64,13 @@
     localStorage.setItem('table.filter', JSON.stringify(filter));
   };
 
-  const updateFilter = () => {
-    if (__.debugFilterLog) {
-      console.log(filter.state);
-    }
-    filter.rawValueByColumnIdx = filter.rawValueByColumnIdx;
-    filter.expFnByColumnIdx = filter.expFnByColumnIdx;
-    filter.bindValues = filter.bindValues;
-    filter.state = filter.state;
-
-    saveFilterSettings();
-  };
   const resetColumnFilter = (colIdx) => {
     filter.rawValueByColumnIdx[colIdx] = null;
     filter.expFnByColumnIdx[colIdx] = null;
     filter.bindValues[colIdx] = '';
     filter.state[colIdx] = FILTER_ENUM.NULL;
 
-    updateFilter();
+    saveFilterSettings();
   };
 
   const handleFilterChange = (colIdx, elem) => {
@@ -100,7 +89,7 @@
       filter.rawValueByColumnIdx[colIdx] = newValue;
       filter.expFnByColumnIdx[colIdx] = null;
 
-      updateFilter();
+      saveFilterSettings();
       return;
     }
 
@@ -118,7 +107,7 @@
       filter.state[colIdx] = FILTER_ENUM.INVALID_EXPRESSION;
     }
 
-    updateFilter();
+    saveFilterSettings();
   };
 
   $: sortedByIndex = columns.indexOf(__.sortedBy);
@@ -192,7 +181,6 @@
     (columnIndex) =>
     ({ currentTarget }) => {
       filter.bindValues[columnIndex] = currentTarget.value;
-      filter.bindValues = filter.bindValues;
       __.pageNow = 0; // reset selected page, when change filter
 
       debounce(() => handleFilterChange(columnIndex, currentTarget));
