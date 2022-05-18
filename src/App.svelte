@@ -12,6 +12,6 @@
     hiddenColumns: [columns.indexOf('Description')],
     rowsPerPage: 25,
     sortedBy: 'Name',
-    startFilteringDebounceMs: 300,
+    startFilteringDebounceMs: 100,
   }}
 />

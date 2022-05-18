@@ -67,13 +67,16 @@
   const resetColumnFilter = (colIdx) => {
     filter.rawValueByColumnIdx[colIdx] = null;
     filter.expFnByColumnIdx[colIdx] = null;
-    filter.bindValues[colIdx] = '';
+    filter.bindValues[colIdx] = false;
     filter.state[colIdx] = FILTER_ENUM.NULL;
 
     saveFilterSettings();
   };
 
   const handleFilterChange = (colIdx, elem) => {
+    filter.bindValues[colIdx] = true // elem.value;
+    __.pageNow = 0; // reset selected page, when change filter
+
     const newValue = elem.value.trim();
 
     if (newValue === '') {
@@ -180,9 +183,6 @@
   const handleFilterTyping =
     (columnIndex) =>
     ({ currentTarget }) => {
-      filter.bindValues[columnIndex] = currentTarget.value;
-      __.pageNow = 0; // reset selected page, when change filter
-
       debounce(() => handleFilterChange(columnIndex, currentTarget));
     };
 
@@ -216,7 +216,6 @@
         {columnsShown}
         stateFilter={filter.state}
         {FILTER_ENUM}
-        bind:filterBindValues={filter.bindValues}
         {handleFilterTyping}
       />
       <TableColumnHeader {columnsShown} {changeSortSettingsHandler} sortedBy={__.sortedBy} sortOrder={__.sortOrder} />
