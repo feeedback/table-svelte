@@ -1,7 +1,8 @@
-const alphabet =
-  // eslint-disable-next-line prefer-template
-  'abcdefghijklmnopqrstuvwxyz' + 'abcdefghijklmnopqrstuvwxyz'.replace(/./g, (c) => c.toUpperCase());
+const alphabetLower = 'abcdefghijklmnopqrstuvwxyz';
+const alphabetUpper = alphabetLower.replace(/./g, (c) => c.toUpperCase());
+const alphabet = alphabetLower + alphabetUpper;
 const numsDict = '0123456789';
+
 const getRandomInt = (maxNum = 100) => Number.parseInt(Math.random() * maxNum, 10);
 
 const getRandomStr = (queryLen = 7, dictionary = alphabet) => {
@@ -17,17 +18,18 @@ const getRandomStr = (queryLen = 7, dictionary = alphabet) => {
   return str;
 };
 const getRIntLen = (queryLen = 3) => getRandomStr(queryLen, numsDict);
+const getPhoneRandom = () => `+${getRIntLen(1)} ${getRIntLen(3)} ${getRIntLen(3)} ${getRIntLen(2)} ${getRIntLen(2)}`;
 
 export const generateTestData = (count = 200) => {
   const testData = [];
 
   for (let i = 0; i < count; i++) {
     testData.push([
-      getRandomStr(20),
-      getRandomStr(50),
+      getRandomStr(15),
+      getRandomStr(50, 'abcdefghijk'),
       getRandomInt(10000),
       getRandomInt(2),
-      `+${getRIntLen(1)} ${getRIntLen(3)} ${getRIntLen(3)} ${getRIntLen(2)} ${getRIntLen(2)}`,
+      getPhoneRandom(),
       // desc: getRandomStr(2) + ' ' + getRandomStr(2) + ' ' + getRandomStr(2) + ' ' + getRandomStr(2) + ' ' + getRandomStr(2) + ' ' + getRandomStr(2) + ' ' + getRandomStr(5),
     ]);
     // book.desc_words = getWords(book.desc)

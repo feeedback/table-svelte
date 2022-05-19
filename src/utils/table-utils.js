@@ -55,7 +55,7 @@ export const parseExpression = (expressionRaw) => {
   return parsedConditions;
 };
 
-export const isExpression = (str) => str && /^[>=<]/.test(str);
+export const isExpression = (str) => str && /^[!>=<]/.test(str);
 export const isEmptyExpression = (str) => marks.some((mark) => str === mark);
 export const isInvalidExpression = (exp) => parseExpression(exp) === null;
 export const isValidExpression = (exp) => isExpression(exp) && !isInvalidExpression(exp);

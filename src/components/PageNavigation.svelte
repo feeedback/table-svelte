@@ -1,6 +1,7 @@
 <script>
-  import { iconSymbols as icons, THIN_SPACE } from '../utils/symbols.js';
+  import { iconSymbols, THIN_SPACE } from '../utils/symbols.js';
 
+  const icons = iconSymbols.page;
   export let counts = {};
   export let pageNow = 0;
   export let isHighlightPageNow = false;

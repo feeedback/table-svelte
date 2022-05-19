@@ -1,5 +1,5 @@
 <script>
-  import { THIN_SPACE } from '../utils/table-utils.js';
+  import { THIN_SPACE } from '../utils/symbols.js';
 
   export let counts = {};
 </script>
