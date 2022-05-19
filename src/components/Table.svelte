@@ -33,24 +33,26 @@
     ...settings,
   };
   // -----------------------
+  const columnLen = columns.length;
   const debounce = createDebounceFn(__.startFilteringDebounceMs);
 
   $: columnsShown = Object.entries(columns)
     .map(([index, name]) => [Number(index), name])
     .filter(([index]) => !__.hiddenColumns.includes(index));
 
-  const filter = {
+  let filter = {
     state: columns.map(() => FILTER_ENUM.NULL),
-    bindValues: new Array(columns.length).fill(null),
-    rawValueByColumnIdx: new Array(columns.length).fill(null),
-    expFnByColumnIdx: new Array(columns.length).fill(null),
+    rawValueByColumnIdx: new Array(columnLen).fill(null),
+    expFnByColumnIdx: new Array(columnLen).fill(null),
   };
+  let filterInputBindValues = new Array(columnLen).fill(null);
 
-  let cache = saveLoadSettingsCache({ data, columns, filter, settings: __ });
+  let cache = saveLoadSettingsCache({ data, columns, filter, settings: __, filterInputBindValues });
   data = cache.data;
   columns = cache.columns;
   __ = cache.settings;
-  // filter = cache.filter;
+  filter = cache.filter;
+  filterInputBindValues = cache.filterInputBindValues;
   cache = undefined;
 
   const saveColumnSettings = () => {
@@ -60,20 +62,22 @@
     localStorage.setItem('table.settings', JSON.stringify(__));
   };
   const saveFilterSettings = () => {
-    // localStorage.setItem('table.filter', JSON.stringify(filter));
+    localStorage.setItem('table.filter', JSON.stringify(filter));
+    localStorage.setItem('table.filterInputBindValues', JSON.stringify(filterInputBindValues));
   };
 
   const resetColumnFilter = (colIdx) => {
+    filterInputBindValues[colIdx] = '';
+
     filter.rawValueByColumnIdx[colIdx] = null;
     filter.expFnByColumnIdx[colIdx] = null;
-    filter.bindValues[colIdx] = false;
     filter.state[colIdx] = FILTER_ENUM.NULL;
 
     saveFilterSettings();
   };
 
   const handleFilterChange = (colIdx, elem) => {
-    filter.bindValues[colIdx] = true; // elem.value;
+    filterInputBindValues[colIdx] = elem.value;
     __.pageNow = 0; // reset selected page, when change filter
 
     const newValue = elem.value.trim();
@@ -211,7 +215,13 @@
   <table class="component-table">
     <thead>
       <TableCountsContainer {counts} bind:pageNow={__.pageNow} />
-      <FilterContainer {columnsShown} stateFilter={filter.state} {FILTER_ENUM} {handleFilterTyping} />
+      <FilterContainer
+        {columnsShown}
+        stateFilter={filter.state}
+        {FILTER_ENUM}
+        {handleFilterTyping}
+        bind:filterInputBindValues
+      />
       <TableColumnHeader {columnsShown} {changeSortSettingsHandler} sortedBy={__.sortedBy} sortOrder={__.sortOrder} />
     </thead>
     <tbody>

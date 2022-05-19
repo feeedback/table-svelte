@@ -1,4 +1,5 @@
 <script>
+  export let filterInputBindValues;
   export let columnsShown = [];
   export let stateFilter = [];
   export let FILTER_ENUM = {};
@@ -11,6 +12,7 @@
       <input
         class="filter-container__input"
         aria-label={`filter by ${columnName}`}
+        bind:value={filterInputBindValues[columnIndex]}
         on:input|capture={handleFilterTyping(columnIndex)}
         class:active-filter={stateFilter[columnIndex] !== FILTER_ENUM.NULL}
         class:active-filter-expression={stateFilter[columnIndex].includes('EXPRESSION')}

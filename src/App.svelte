@@ -2,7 +2,7 @@
   import { generateTestData } from './utils/generate-data.js';
   import Table from './components/Table.svelte';
 
-  const { data, headers: columns } = generateTestData(30000);
+  const { data, headers: columns } = generateTestData(10000);
 </script>
 
 <Table
@@ -12,6 +12,6 @@
     hiddenColumns: [columns.indexOf('Description')],
     rowsPerPage: 25,
     sortedBy: 'Name',
-    startFilteringDebounceMs: 100,
+    startFilteringDebounceMs: 70,
   }}
 />
