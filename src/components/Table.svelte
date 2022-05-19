@@ -39,7 +39,7 @@
     .map(([index, name]) => [Number(index), name])
     .filter(([index]) => !__.hiddenColumns.includes(index));
 
-  let filter = {
+  const filter = {
     state: columns.map(() => FILTER_ENUM.NULL),
     bindValues: new Array(columns.length).fill(null),
     rawValueByColumnIdx: new Array(columns.length).fill(null),
@@ -50,7 +50,7 @@
   data = cache.data;
   columns = cache.columns;
   __ = cache.settings;
-  filter = cache.filter;
+  // filter = cache.filter;
   cache = undefined;
 
   const saveColumnSettings = () => {
@@ -60,7 +60,7 @@
     localStorage.setItem('table.settings', JSON.stringify(__));
   };
   const saveFilterSettings = () => {
-    localStorage.setItem('table.filter', JSON.stringify(filter));
+    // localStorage.setItem('table.filter', JSON.stringify(filter));
   };
 
   const resetColumnFilter = (colIdx) => {
