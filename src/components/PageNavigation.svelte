@@ -1,8 +1,7 @@
 <script>
-  import { THIN_SPACE } from '../utils/table-utils.js';
+  import { iconSymbols as icons, THIN_SPACE } from '../utils/symbols.js';
 
   export let counts = {};
-  export let icons = {};
   export let pageNow = 0;
   export let isHighlightPageNow = false;
   $: {

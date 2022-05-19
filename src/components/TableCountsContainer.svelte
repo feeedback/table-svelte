@@ -3,7 +3,6 @@
   import PageNavigation from './PageNavigation.svelte';
 
   export let counts = {};
-  export let icons = {};
   export let pageNow = 0;
 </script>
 
@@ -11,7 +10,7 @@
   <td colspan={counts.columnsShown} class="table-counts-container__cell">
     <div class="table-counts-container">
       <TableCounts {counts} />
-      <PageNavigation {counts} {icons} bind:pageNow />
+      <PageNavigation {counts} bind:pageNow />
     </div>
   </td>
 </tr>

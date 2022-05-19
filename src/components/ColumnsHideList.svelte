@@ -4,7 +4,6 @@
   export let columns = [];
   export let hiddenColumns = [];
   export let handlers = {};
-  export let icons = {};
 </script>
 
 <div class="columns-hide-list__container">
@@ -12,7 +11,7 @@
     <summary class="columns-hide-list__header">Columns</summary>
     <div class="columns-hide-list__list">
       {#each columns as columnName, columnIndex}
-        <ColumnsHideListElement {hiddenColumns} {columnName} {columnIndex} {handlers} {icons} />
+        <ColumnsHideListElement {hiddenColumns} {columnName} {columnIndex} {handlers} />
       {/each}
     </div>
   </details>

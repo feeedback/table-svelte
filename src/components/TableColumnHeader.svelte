@@ -1,7 +1,12 @@
 <script>
   // eslint-disable-next-line import/no-extraneous-dependencies
   import { onMount } from 'svelte';
-  import { iconSymbolsByOrder } from '../utils/table-utils.js';
+  import { iconSymbols } from '../utils/symbols.js';
+
+  const iconSymbolsByOrder = {
+    1: iconSymbols.sort.asc,
+    '-1': iconSymbols.sort.desc,
+  };
 
   export let columnsShown = {};
   export let changeSortSettingsHandler;

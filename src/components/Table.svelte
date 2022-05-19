@@ -6,7 +6,6 @@
   import TableColumnHeader from './TableColumnHeader.svelte';
 
   import {
-    iconSymbols as icons,
     getExpressionCheckFn,
     isExpression,
     parseExpression,
@@ -74,7 +73,7 @@
   };
 
   const handleFilterChange = (colIdx, elem) => {
-    filter.bindValues[colIdx] = true // elem.value;
+    filter.bindValues[colIdx] = true; // elem.value;
     __.pageNow = 0; // reset selected page, when change filter
 
     const newValue = elem.value.trim();
@@ -207,17 +206,12 @@
 </svelte:head>
 
 <div class="component-table__container">
-  <ColumnsHideList {columns} hiddenColumns={__.hiddenColumns} {handlers} icons={icons.column} />
+  <ColumnsHideList {columns} hiddenColumns={__.hiddenColumns} {handlers} />
 
   <table class="component-table">
     <thead>
-      <TableCountsContainer {counts} bind:pageNow={__.pageNow} icons={icons.page} />
-      <FilterContainer
-        {columnsShown}
-        stateFilter={filter.state}
-        {FILTER_ENUM}
-        {handleFilterTyping}
-      />
+      <TableCountsContainer {counts} bind:pageNow={__.pageNow} />
+      <FilterContainer {columnsShown} stateFilter={filter.state} {FILTER_ENUM} {handleFilterTyping} />
       <TableColumnHeader {columnsShown} {changeSortSettingsHandler} sortedBy={__.sortedBy} sortOrder={__.sortOrder} />
     </thead>
     <tbody>

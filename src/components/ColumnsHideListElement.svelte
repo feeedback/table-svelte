@@ -2,11 +2,12 @@
   // eslint-disable-next-line import/no-extraneous-dependencies
   import { onMount } from 'svelte';
 
+  import { iconSymbols as icons } from '../utils/symbols.js';
+
   export let columnName = '';
   export let columnIndex = 0;
   export let hiddenColumns = [];
   export let handlers = {};
-  export let icons = {};
 
   let isFirst = true;
   onMount(() => {
