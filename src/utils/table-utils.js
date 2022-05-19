@@ -1,24 +1,25 @@
-/* eslint-disable no-useless-concat */
+/* eslint-disable eqeqeq */
 export const mapMarkToFn = {
   '>=': (pivot) => (x) => x >= pivot,
   '>': (pivot) => (x) => x > pivot,
   '<=': (pivot) => (x) => x <= pivot,
   '<': (pivot) => (x) => x < pivot,
-  // eslint-disable-next-line eqeqeq
   '=': (pivot) => (x) => x == pivot,
+  '!': (pivot) => (x) => x != pivot,
+  '!=': (pivot) => (x) => x != pivot,
 };
 export const marksSet = new Set(Object.keys(mapMarkToFn));
 const marks = [...marksSet].sort((a, b) => b.length - a.length);
 
 export const parseOneExpression = (expression) => {
-  const indexMarkEnd = expression[1] === '=' ? 2 : 1;
+  const indexMarkEnd = marks.find((mark) => expression.startsWith(mark))?.length;
 
+  if (!indexMarkEnd) {
+    return null;
+  }
   const mark = expression.slice(0, indexMarkEnd);
   const pivotValue = expression.slice(indexMarkEnd);
 
-  if (!marksSet.has(mark)) {
-    return null;
-  }
   if (pivotValue === '') {
     return { mark, pivotValue: '' };
   }
