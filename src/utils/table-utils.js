@@ -1,9 +1,9 @@
 /* eslint-disable eqeqeq */
 export const mapMarkToFn = {
-  '>=': (pivot) => (x) => x >= pivot,
-  '>': (pivot) => (x) => x > pivot,
-  '<=': (pivot) => (x) => x <= pivot,
-  '<': (pivot) => (x) => x < pivot,
+  '>=': (pivot) => (x) => Number(x) >= Number(pivot),
+  '>': (pivot) => (x) => Number(x) > Number(pivot),
+  '<=': (pivot) => (x) => Number(x) <= Number(pivot),
+  '<': (pivot) => (x) => Number(x) < Number(pivot),
   '=': (pivot) => (x) => x == pivot,
   '!': (pivot) => (x) => x != pivot,
   '!=': (pivot) => (x) => x != pivot,
@@ -11,27 +11,33 @@ export const mapMarkToFn = {
 export const marksSet = new Set(Object.keys(mapMarkToFn));
 const marks = [...marksSet].sort((a, b) => b.length - a.length);
 
+export const isMathMark = (str) => str && /^[><]/.test(str);
+export const isValidMathExpression = (pivotValue) => !Number.isNaN(Number(pivotValue));
+export const isExpression = (str) => str && /^[!>=<]/.test(str);
+export const isEmptyExpression = (str) => marks.some((mark) => str === mark);
+
 export const parseOneExpression = (expression) => {
   const indexMarkEnd = marks.find((mark) => expression.startsWith(mark))?.length;
 
   if (!indexMarkEnd) {
     return null;
   }
-  const mark = expression.slice(0, indexMarkEnd);
-  const pivotValue = expression.slice(indexMarkEnd);
+  const mark = expression.slice(0, indexMarkEnd).trim();
+  const pivotValue = expression.slice(indexMarkEnd).trim();
 
   if (pivotValue === '') {
     return { mark, pivotValue: '' };
   }
-  if (Number.isNaN(Number(pivotValue))) {
+
+  if (isMathMark(mark) && !isValidMathExpression(pivotValue)) {
     return null;
   }
-  return { mark, pivotValue: Number(pivotValue) };
+  return { mark, pivotValue };
 };
 
 export const parseExpression = (expressionRaw) => {
-  const expression = expressionRaw.replace(/\s/g, '');
-  const parts = expression.split('&');
+  const expression = expressionRaw;
+  const parts = expression.split('&').map((exp) => exp.trim());
   const count = parts.length;
 
   const parsedConditions = parts.map((cond) => parseOneExpression(cond));
@@ -56,8 +62,6 @@ export const parseExpression = (expressionRaw) => {
   return parsedConditions;
 };
 
-export const isExpression = (str) => str && /^[!>=<]/.test(str);
-export const isEmptyExpression = (str) => marks.some((mark) => str === mark);
 export const isInvalidExpression = (exp) => parseExpression(exp) === null;
 export const isValidExpression = (exp) => isExpression(exp) && !isInvalidExpression(exp);
 

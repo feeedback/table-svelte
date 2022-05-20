@@ -29,7 +29,7 @@
     text-align: center;
     border: 2px solid #ddd;
     font-style: italic;
-    width: calc(98% - 4px);
+    width: calc(99% - 4px);
   }
 
   .filter-container__input.active-filter {

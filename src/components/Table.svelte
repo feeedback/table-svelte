@@ -100,7 +100,7 @@
     }
 
     filter.state[colIdx] = FILTER_ENUM.EXPRESSION;
-    filter.rawValueByColumnIdx[colIdx] = newValue.replace(/\s/g, '');
+    filter.rawValueByColumnIdx[colIdx] = newValue;
 
     if (isEmptyExpression(newValue)) {
       filter.state[colIdx] = FILTER_ENUM.EMPTY_EXPRESSION;
@@ -143,7 +143,7 @@
 
         const filterExpFn = filter.expFnByColumnIdx[colIdx];
         if (filterExpFn) {
-          return filterExpFn(Number(doc[colIdx]));
+          return filterExpFn((doc[colIdx]));
         }
 
         return String(doc[colIdx]).toLowerCase().indexOf(filterValue.toLowerCase()) !== -1;

@@ -2,7 +2,7 @@
   import { generateTestData } from './utils/generate-data.js';
   import Table from './components/Table.svelte';
 
-  const { data, headers: columns } = generateTestData(10000);
+  const { data, headers: columns } = generateTestData(1000);
 </script>
 
 <Table
