@@ -75,7 +75,7 @@
     width: 26px;
   }
   .animation-loading {
-    animation: opactity-during-loading-font 0.8s;
+    animation: opactity-during-loading-font 1s;
   }
   .columns-hide-list-element:hover button {
     font-variation-settings: 'FILL' 0, 'wght' 700, 'GRAD' 200, 'opsz' 40;

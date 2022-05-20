@@ -51,7 +51,7 @@
     height: 20px;
   }
   .animation-loading {
-    animation: opactity-during-loading-font 0.8s;
+    animation: opactity-during-loading-font 1s;
   }
   .table-columns-header {
     display: flex;

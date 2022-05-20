@@ -71,6 +71,9 @@
   .page-navigation__count-current-page {
     color: #000;
   }
+  .page-navigation__button:disabled {
+    color: #bbb;
+  }
   .page-navigation__button {
     font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 40;
     padding: 0;
@@ -83,7 +86,7 @@
     height: 26px;
     width: 26px;
     /* color: #333; */
-    animation: opactity-during-loading-font 0.8s;
+    animation: opactity-during-loading-font 1s;
   }
   .page-navigation__button:not([disabled]):hover {
     border-color: rgb(220 220 220);

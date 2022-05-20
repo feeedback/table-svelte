@@ -205,11 +205,10 @@
 </script>
 
 <svelte:head>
-  <link rel="stylesheet" href="./static/Material_Symbols_Outlined.css" />
-  <!-- <link
+  <link
     rel="stylesheet"
     href="https://fonts.sandbox.google.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,300..700,0..1,0..200"
-  /> -->
+  />
 </svelte:head>
 
 <div class="component-table__container">
@@ -240,15 +239,67 @@
 </div>
 
 <style>
+  :global(html, body) {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    /* background-color: rgb(26, 26, 26); */
+  }
+
+  :global(*, *::before, *::after) {
+    box-sizing: border-box;
+  }
+
+  :global(body) {
+    color: #333;
+    margin: 0;
+    padding: 8px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue',
+      sans-serif;
+  }
+
+  :global(input, button, select, textarea) {
+    font-family: inherit;
+    font-size: inherit;
+    padding: 0.2em;
+    margin: 0 0 0.5em 0;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+  }
+
+  :global(button) {
+    color: #333;
+    background-color: #f6f6f6;
+  }
+
+  :global(.material-symbols-outlined) {
+    font-family: 'Material Symbols Outlined';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    font-feature-settings: 'liga';
+    -webkit-font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
+  }
   @keyframes -global-opactity-during-loading-font {
     0% {
       opacity: 0.4;
       color: rgba(0, 0, 0, 0.01);
     }
-    30% {
-      opacity: 0.6;
-      /* color: rgba(0, 0, 0, 0.4); */
+    /* 30% {
+      opacity: 0.4;
+      color: rgba(0, 0, 0, 0.01);
     }
+    40% {
+      opacity: 0.6;
+    } */
     100% {
       opacity: 1;
     }
