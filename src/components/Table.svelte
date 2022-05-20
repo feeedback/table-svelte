@@ -293,13 +293,10 @@
       opacity: 0.4;
       color: rgba(0, 0, 0, 0.01);
     }
-    /* 30% {
+    40% {
       opacity: 0.4;
       color: rgba(0, 0, 0, 0.01);
     }
-    40% {
-      opacity: 0.6;
-    } */
     100% {
       opacity: 1;
     }

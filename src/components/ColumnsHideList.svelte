@@ -7,7 +7,7 @@
 </script>
 
 <div class="columns-hide-list__container">
-  <details open>
+  <details>
     <summary class="columns-hide-list__header">Columns</summary>
     <div class="columns-hide-list__list">
       {#each columns as columnName, columnIndex}
