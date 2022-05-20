@@ -18,7 +18,8 @@ const getRandomStr = (queryLen = 7, dictionary = alphabet) => {
   return str;
 };
 const getRIntLen = (queryLen = 3) => getRandomStr(queryLen, numsDict);
-const getPhoneRandom = () => `+${getRIntLen(1)} ${getRIntLen(3)} ${getRIntLen(3)} ${getRIntLen(2)} ${getRIntLen(2)}`;
+const getPhoneRandom = () =>
+  `+${getRIntLen(1)}&nbsp;${getRIntLen(3)}&nbsp;${getRIntLen(3)}&nbsp;${getRIntLen(2)}&nbsp;${getRIntLen(2)}`;
 
 export const generateTestData = (count = 200) => {
   const testData = [];
@@ -26,7 +27,11 @@ export const generateTestData = (count = 200) => {
   for (let i = 0; i < count; i++) {
     testData.push([
       getRandomStr(15),
-      getRandomStr(50, 'abcdefghijk'),
+      // getRandomStr(50, 'abcdefghijk').split(/[abc]/g).join(' '),
+      `${getRandomStr(10, 'abcdefghijk')} ${getRandomStr(8, 'abcdefghijk')} ${getRandomStr(
+        8,
+        'abcdefghijk'
+      )} ${getRandomStr(8, 'abcdefghijk')}`,
       getRandomInt(10000),
       getRandomInt(2),
       getPhoneRandom(),

@@ -13,5 +13,6 @@
     rowsPerPage: 25,
     sortedBy: 'Name',
     startFilteringDebounceMs: 70,
+    columnsIdxIsWrap: [columns.indexOf('Description')],
   }}
 />

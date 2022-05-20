@@ -30,6 +30,7 @@
       sortOrder: 1,
       startFilteringDebounceMs: 50,
       debugFilterLog: false,
+      columnsIdxIsWrap: [],
     },
     ...settings,
   };
@@ -160,11 +161,7 @@
 
   $: rowsPage = rows
     .slice(counts.rows.currentStart, counts.rows.currentEnd)
-    .map((doc) =>
-      doc
-        .map((val, i) => highlightQueryInFiltered(filter.rawValueByColumnIdx[i], val))
-        .filter((v, index) => !__.hiddenColumns.includes(index))
-    );
+    .map((doc) => doc.map((val, i) => highlightQueryInFiltered(filter.rawValueByColumnIdx[i], val)));
 
   const handlers = {
     showColumn: (columnIndex) => {
@@ -229,8 +226,12 @@
     <tbody>
       {#each rowsPage as row}
         <tr>
-          {#each row as cell}
-            <td>{@html cell}</td>
+          {#each row as cell, index}
+            {#if !__.hiddenColumns.includes(index)}
+              <td class:td-wrap={__.columnsIdxIsWrap.includes(index)}>
+                <span class="td-content" class:td-content-wrap={__.columnsIdxIsWrap.includes(index)}>{@html cell}</span>
+              </td>
+            {/if}
           {/each}
         </tr>
       {/each}
@@ -327,6 +328,7 @@
     user-select: none;
     /* text-align: center; */
   }
+
   .component-table td {
     user-select: text;
 
@@ -334,7 +336,27 @@
     padding-right: 10px;
     /* for min-width hack */
     /* width: 86px; */
-    width: 130px;
+    width: 110px;
+  }
+  .component-table td {
+    max-width: 240px;
+  }
+  .component-table .td-content {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+  }
+  .component-table .td-content-wrap {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+  .component-table .td-wrap {
+    white-space: break-spaces;
+    width: max-content !important;
+    word-break: break-all;
+    min-width: 180px;
+    max-width: 480px !important;
   }
   :global(.component-table mark) {
     background-color: hsl(120deg 93% 88%);
