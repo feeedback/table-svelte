@@ -14,6 +14,7 @@
     highlightQueryInFiltered,
     FILTER_ENUM,
     saveLoadSettingsCache,
+    CHAR_STARS_WITH,
   } from '../utils/table-utils.js';
 
   // -------- props --------
@@ -143,9 +144,11 @@
 
         const filterExpFn = filter.expFnByColumnIdx[colIdx];
         if (filterExpFn) {
-          return filterExpFn((doc[colIdx]));
+          return filterExpFn(doc[colIdx]);
         }
-
+        if (filterValue[0] === CHAR_STARS_WITH) {
+          return String(doc[colIdx]).toLowerCase().indexOf(filterValue.slice(1).toLowerCase()) === 0;
+        }
         return String(doc[colIdx]).toLowerCase().indexOf(filterValue.toLowerCase()) !== -1;
       });
 

@@ -1,4 +1,7 @@
 /* eslint-disable eqeqeq */
+
+export const CHAR_STARS_WITH = '^';
+
 export const mapMarkToFn = {
   '>=': (pivot) => (x) => Number(x) >= Number(pivot),
   '>': (pivot) => (x) => Number(x) > Number(pivot),
@@ -68,14 +71,16 @@ export const isValidExpression = (exp) => isExpression(exp) && !isInvalidExpress
 export const getExpressionCheckFn = (exp) => (queryValue) =>
   exp.every(({ mark, pivotValue }) => mapMarkToFn[mark](pivotValue)(queryValue));
 
-export const highlightQueryInFiltered = (queryValue, value) => {
-  if (queryValue === null || !queryValue || isExpression(queryValue)) {
+export const highlightQueryInFiltered = (queryValueRaw, value) => {
+  if (queryValueRaw === null || !queryValueRaw || isExpression(queryValueRaw)) {
     return value;
   }
 
+  const queryValue = queryValueRaw[0] === CHAR_STARS_WITH ? queryValueRaw.slice(1) : queryValueRaw;
   const queryValueStr = String(queryValue).toLowerCase();
-  const strValue = String(value);
   const queryLen = queryValue.length;
+
+  const strValue = String(value);
   const queryStart = strValue.toLowerCase().indexOf(queryValueStr);
   const queryEnd = queryStart + queryLen;
 
