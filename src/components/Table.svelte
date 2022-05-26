@@ -289,19 +289,6 @@
     -webkit-font-feature-settings: 'liga';
     -webkit-font-smoothing: antialiased;
   }
-  @keyframes -global-opactity-during-loading-font {
-    0% {
-      opacity: 0.4;
-      color: rgba(0, 0, 0, 0.01);
-    }
-    40% {
-      opacity: 0.4;
-      color: rgba(0, 0, 0, 0.01);
-    }
-    100% {
-      opacity: 1;
-    }
-  }
 
   .component-table__container {
     margin: 0 15px;

@@ -1,7 +1,4 @@
 <script>
-  // eslint-disable-next-line import/no-extraneous-dependencies
-  import { onMount } from 'svelte';
-
   import { iconSymbols } from '../utils/symbols.js';
 
   const icons = iconSymbols.column;
@@ -10,13 +7,6 @@
   export let columnIndex = 0;
   export let hiddenColumns = [];
   export let handlers = {};
-
-  let isFirst = true;
-  onMount(() => {
-    setTimeout(() => {
-      isFirst = false;
-    }, 200);
-  });
 </script>
 
 <div class="columns-hide-list-element">
@@ -31,13 +21,11 @@
     {#if hiddenColumns.includes(columnIndex)}
       <button
         class="columns-hide-list-element__add-column material-symbols-outlined"
-        class:animation-loading={isFirst}
         on:click={() => handlers.showColumn(columnIndex)}>{@html icons.add}</button
       >
     {:else}
       <button
         class="columns-hide-list-element__hide-column material-symbols-outlined"
-        class:animation-loading={isFirst}
         on:click={() => handlers.hideColumn(columnIndex)}>{@html icons.hide}</button
       >
     {/if}
@@ -73,9 +61,6 @@
     cursor: pointer;
     height: 26px;
     width: 26px;
-  }
-  .animation-loading {
-    animation: opactity-during-loading-font 1s;
   }
   .columns-hide-list-element:hover button {
     font-variation-settings: 'FILL' 0, 'wght' 700, 'GRAD' 200, 'opsz' 40;

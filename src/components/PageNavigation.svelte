@@ -86,7 +86,6 @@
     height: 26px;
     width: 26px;
     /* color: #333; */
-    animation: opactity-during-loading-font 1s;
   }
   .page-navigation__button:not([disabled]):hover {
     border-color: rgb(220 220 220);

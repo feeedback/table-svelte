@@ -1,6 +1,4 @@
 <script>
-  // eslint-disable-next-line import/no-extraneous-dependencies
-  import { onMount } from 'svelte';
   import { iconSymbols } from '../utils/symbols.js';
 
   const iconSymbolsByOrder = {
@@ -12,12 +10,6 @@
   export let changeSortSettingsHandler;
   export let sortedBy = '';
   export let sortOrder = 1;
-  let isFirst = true;
-  onMount(() => {
-    setTimeout(() => {
-      isFirst = false;
-    }, 200);
-  });
 </script>
 
 <tr class="table-columns-header__row">
@@ -26,7 +18,7 @@
       <span class="table-columns-header"
         ><span>{columnName}</span>
         {#if sortedBy === columnName}
-          <span class="table-columns-header__icon-sort material-symbols-outlined" class:animation-loading={isFirst}
+          <span class="table-columns-header__icon-sort material-symbols-outlined"
             >{@html iconSymbolsByOrder[sortOrder]}</span
           >
         {/if}</span
@@ -49,9 +41,6 @@
     font-size: 20px;
     width: 20px;
     height: 20px;
-  }
-  .animation-loading {
-    animation: opactity-during-loading-font 1s;
   }
   .table-columns-header {
     display: flex;
