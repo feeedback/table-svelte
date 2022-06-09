@@ -31,6 +31,7 @@
       startFilteringDebounceMs: 50,
       debugFilterLog: false,
       columnsIdxIsWrap: [],
+      isUseCache: false,
     },
     ...settings,
   };
@@ -49,23 +50,31 @@
   };
   let filterInputBindValues = new Array(columnLen).fill(null);
 
-  let cache = saveLoadSettingsCache({ data, columns, filter, settings: __, filterInputBindValues });
-  data = cache.data;
-  columns = cache.columns;
-  __ = cache.settings;
-  filter = cache.filter;
-  filterInputBindValues = cache.filterInputBindValues;
-  cache = undefined;
+  if (__.isUseCache) {
+    let cache = saveLoadSettingsCache({ data, columns, filter, settings: __, filterInputBindValues });
+    data = cache.data;
+    columns = cache.columns;
+    __ = cache.settings;
+    filter = cache.filter;
+    filterInputBindValues = cache.filterInputBindValues;
+    cache = undefined;
+  }
 
   const saveColumnSettings = () => {
-    localStorage.setItem('table.settings', JSON.stringify(__));
+    if (__.isUseCache) {
+      localStorage.setItem('table.settings', JSON.stringify(__));
+    }
   };
   const saveSortSettings = () => {
-    localStorage.setItem('table.settings', JSON.stringify(__));
+    if (__.isUseCache) {
+      localStorage.setItem('table.settings', JSON.stringify(__));
+    }
   };
   const saveFilterSettings = () => {
-    localStorage.setItem('table.filter', JSON.stringify(filter));
-    localStorage.setItem('table.filterInputBindValues', JSON.stringify(filterInputBindValues));
+    if (__.isUseCache) {
+      localStorage.setItem('table.filter', JSON.stringify(filter));
+      localStorage.setItem('table.filterInputBindValues', JSON.stringify(filterInputBindValues));
+    }
   };
 
   const resetColumnFilter = (colIdx) => {
