@@ -17,5 +17,6 @@ export const iconSymbols = {
   },
 };
 
-export const THIN_SPACE = '&#8239;';
+// export const THIN_SPACE = '&#8239;';
+export const THIN_SPACE = '&nbsp;';
 export const delimiterSymbols = `${THIN_SPACE}/${THIN_SPACE}`;

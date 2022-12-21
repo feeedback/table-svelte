@@ -217,7 +217,7 @@
   />
 </svelte:head>
 
-<div class="component-table__container">
+<div class="component-table__container" id="component-table">
   <ColumnsHideList {columns} hiddenColumns={__.hiddenColumns} {handlers} />
 
   <table class="component-table">
@@ -301,9 +301,9 @@
 
   .component-table__container {
     margin: 0 15px;
-    font-family: monospace;
+    /* font-family: monospace; */
     /* font-family: 'Roboto Mono', monospace; */
-    font-size: 18px;
+    font-size: 17px;
     margin-left: auto;
     margin-right: auto;
     margin-top: 8px;
