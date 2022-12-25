@@ -18,17 +18,21 @@
   } from '../utils/table-utils.js';
 
   // -------- props --------
-  export let data = [];
+  export let rowsData = [];
   export let columns = [];
   export let settings = {};
+  // -------- props --------
+
+  // вынес потому как, если хранить в объекте, то при смене страницы - пересчитывается сортировка
+  let sortedBy = '';
+  let sortOrder = 1;
+
   let __ = {
     ...{
       hiddenColumns: [],
       rowsPerPage: 30,
       pageNow: 0,
-      sortedBy: '',
-      sortOrder: 1,
-      startFilteringDebounceMs: 50,
+      startFilteringDebounceMs: Math.max(0, Math.round(rowsData.length ** (1 / 2.7) / 2)),
       debugFilterLog: false,
       columnsIdxIsWrap: [],
       isUseCache: false,
@@ -51,8 +55,7 @@
   let filterInputBindValues = new Array(columnLen).fill(null);
 
   if (__.isUseCache) {
-    let cache = saveLoadSettingsCache({ data, columns, filter, settings: __, filterInputBindValues });
-    data = cache.data;
+    let cache = saveLoadSettingsCache({ columns, filter, settings: __, filterInputBindValues });
     columns = cache.columns;
     __ = cache.settings;
     filter = cache.filter;
@@ -127,10 +130,10 @@
     saveFilterSettings();
   };
 
-  $: sortedByIndex = columns.indexOf(__.sortedBy);
+  $: sortedByIndex = columns.indexOf(sortedBy);
 
   $: counts = {
-    rowsAll: data.length,
+    rowsAll: rowsData.length,
     columnsShown: columnsShown.length,
 
     page: {
@@ -162,9 +165,13 @@
         return String(doc[colIdx]).toLowerCase().indexOf(filterValue.toLowerCase()) !== -1;
       });
 
-  $: rows = data
-    .filter((doc) => fnFilteringDoc(doc))
-    .sort((docA, docB) => (!__.sortedBy ? 0 : compareAB(docA[sortedByIndex], docB[sortedByIndex]) * __.sortOrder));
+  $: filterMy = (arr) => arr.filter((doc) => fnFilteringDoc(doc));
+  $: sortMy = (arr) => {
+    arr.sort((docA, docB) => (!sortedBy ? 0 : compareAB(docA[sortedByIndex], docB[sortedByIndex]) * sortOrder));
+    return arr;
+  };
+
+  $: rows = sortMy(filterMy(rowsData));
 
   $: filteredCount = rows.length;
 
@@ -183,7 +190,7 @@
 
       if (sortedByIndex === columnIndex) {
         // reset sort by this column
-        __.sortedBy = '';
+        sortedBy = '';
       }
 
       __.hiddenColumns.push(columnIndex); // hide column
@@ -198,16 +205,17 @@
       debounce(() => handleFilterChange(columnIndex, currentTarget));
     };
 
-  const changeSortSettingsHandler = (columnName) => {
-    if (__.sortedBy === columnName) {
-      __.sortOrder *= -1;
+  const _changeSortSettingsHandler = (columnName) => {
+    if (sortedBy === columnName) {
+      sortOrder *= -1;
     } else {
-      __.sortOrder = 1;
+      sortOrder = 1;
     }
-    __.sortedBy = columnName;
+    sortedBy = columnName;
     __.pageNow = 0;
     saveSortSettings();
   };
+  const changeSortSettingsHandler = (columnName) => debounce(() => _changeSortSettingsHandler(columnName));
 </script>
 
 <svelte:head>
@@ -215,6 +223,11 @@
     rel="stylesheet"
     href="https://fonts.sandbox.google.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,300..700,0..1,0..200"
   />
+  <link rel="preconnect" href="https://fonts.googleapis.com" /><link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  /><link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300&display=swap" rel="stylesheet" />
 </svelte:head>
 
 <div class="component-table__container" id="component-table">
@@ -230,7 +243,7 @@
         {handleFilterTyping}
         bind:filterInputBindValues
       />
-      <TableColumnHeader {columnsShown} {changeSortSettingsHandler} sortedBy={__.sortedBy} sortOrder={__.sortOrder} />
+      <TableColumnHeader {columnsShown} {changeSortSettingsHandler} {sortedBy} {sortOrder} />
     </thead>
     <tbody>
       {#each rowsPage as row}
@@ -301,9 +314,8 @@
 
   .component-table__container {
     margin: 0 15px;
-    /* font-family: monospace; */
-    /* font-family: 'Roboto Mono', monospace; */
-    font-size: 17px;
+    font-family: monospace;
+    font-size: 16px;
     margin-left: auto;
     margin-right: auto;
     margin-top: 8px;
@@ -321,7 +333,7 @@
     border-collapse: collapse;
     /* width: 80%; */
     white-space: nowrap;
-    user-select: none;
+    /* user-select: none; */
     /* text-align: center; */
   }
 
@@ -341,6 +353,8 @@
     overflow: hidden;
     text-overflow: ellipsis;
     display: block;
+
+    font-family: 'Roboto Mono', monospace;
   }
   .component-table .td-content-wrap {
     display: -webkit-box;

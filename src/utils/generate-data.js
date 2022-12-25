@@ -1,4 +1,7 @@
+import { wrapFnPerf } from './utils.js';
+
 const alphabetLower = 'abcdefghijklmnopqrstuvwxyz';
+
 const alphabetUpper = alphabetLower.replace(/./g, (c) => c.toUpperCase());
 const alphabet = alphabetLower + alphabetUpper;
 const numsDict = '0123456789';
@@ -21,7 +24,7 @@ const getRIntLen = (queryLen = 3) => getRandomStr(queryLen, numsDict);
 const getPhoneRandom = () =>
   `+${getRIntLen(1)}&nbsp;${getRIntLen(3)}&nbsp;${getRIntLen(3)}&nbsp;${getRIntLen(2)}&nbsp;${getRIntLen(2)}`;
 
-export const generateTestData = (count = 200) => {
+export const generateTestData = wrapFnPerf((count = 200) => {
   const testData = [];
 
   for (let i = 0; i < count; i++) {
@@ -47,6 +50,6 @@ export const generateTestData = (count = 200) => {
       'Is modify',
       'Phone Number',
     ],
-    data: testData,
+    rowsData: testData,
   };
-};
+}, 'generateTestData');

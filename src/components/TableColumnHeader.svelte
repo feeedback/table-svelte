@@ -46,6 +46,7 @@
     display: flex;
     justify-content: center;
     align-items: flex-end;
-    font-size: 19px;
+    /* font-size: 19px; */
+    font-size: 17px;
   }
 </style>

@@ -20,6 +20,36 @@ export const createDebounceFn = (time = 200) => {
 
   return (fn) => {
     clearTimeout(timerId);
-    timerId = setTimeout(fn, time);
+    timerId = setTimeout(() => fn(), time);
   };
+};
+
+export const perf = (f, label = 'fn') => {
+  const st = performance.now();
+  const res = f();
+
+  console.log(`[${label}]`, Math.ceil((performance.now() - st) * 10) / 10, 'ms');
+
+  return res;
+};
+const cutStrMaxChar = (strRaw, max = 30, isShownCountCut = false) => {
+  let str = strRaw;
+  if (typeof strRaw === 'object' || typeof strRaw === 'function') {
+    if (Array.isArray(strRaw) && strRaw.length > 6) {
+      str = strRaw.slice(0, 6);
+    }
+  }
+  str = JSON.stringify(strRaw);
+  const { length } = str;
+  if (length > max) {
+    const countCutChars = new Intl.NumberFormat('ru-RU').format(length - max);
+    return isShownCountCut ? `${str.slice(0, max)}… ${countCutChars}` : `${str.slice(0, max)}…`;
+  }
+  return str;
+};
+
+export const wrapFnPerf = (fn, fnName, isLogArgs = true) => {
+  const label = (args) => (isLogArgs ? `${fnName} (${args.map((arg) => cutStrMaxChar(arg, 8))})` : `${fnName}`);
+
+  return (...args) => perf(() => fn(...args), label(args));
 };

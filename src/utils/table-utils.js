@@ -102,25 +102,22 @@ export const FILTER_ENUM = {
   INVALID_EXPRESSION: 'INVALID_EXPRESSION',
 };
 
-export const saveLoadSettingsCache = ({ data, columns, filter, settings, filterInputBindValues }) => {
+export const saveLoadSettingsCache = ({ columns, filter, settings, filterInputBindValues }) => {
   const cache = {
-    data: localStorage.getItem('table.data'),
     columns: localStorage.getItem('table.columns'),
     settings: localStorage.getItem('table.settings'),
     filter: localStorage.getItem('table.filter'),
     filterInputBindValues: localStorage.getItem('table.filterInputBindValues'),
   };
 
-  if (!cache.data || !cache.columns) {
-    localStorage.setItem('table.data', JSON.stringify(data));
+  if (!cache.columns) {
     localStorage.setItem('table.columns', JSON.stringify(columns));
     localStorage.setItem('table.settings', JSON.stringify(settings));
     localStorage.setItem('table.filter', JSON.stringify(filter));
     localStorage.setItem('table.filterInputBindValues', JSON.stringify(filterInputBindValues));
-    return { data, columns, filter, settings, filterInputBindValues };
+    return { columns, filter, settings, filterInputBindValues };
   }
 
-  cache.data = JSON.parse(cache.data);
   cache.columns = JSON.parse(cache.columns);
   cache.settings = cache.settings ? { ...JSON.parse(cache.settings), pageNow: 0 } : settings;
   cache.filter = cache.filter ? JSON.parse(cache.filter) : filter;
