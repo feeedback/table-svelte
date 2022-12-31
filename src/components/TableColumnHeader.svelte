@@ -8,15 +8,16 @@
 
   export let columnsShown = {};
   export let changeSortSettingsHandler;
+  export let columnsThSmall = [];
   export let sortedBy = '';
   export let sortOrder = 1;
 </script>
 
 <tr class="table-columns-header__row">
   {#each columnsShown as [columnIndex, columnName]}
-    <th on:click={() => changeSortSettingsHandler(columnName)} class="table-columns-header__cell">
+    <th on:click={() => changeSortSettingsHandler(columnName)} class="table-columns-header__cell" class:th-small={columnsThSmall.includes(columnIndex)}>
       <span class="table-columns-header"
-        ><span>{columnName}</span>
+        ><span>{columnsThSmall.includes(columnIndex) ? columnName.split(/\.?(?=[A-Z])/).join(' '): columnName}</span>
         {#if sortedBy === columnName}
           <span class="table-columns-header__icon-sort material-symbols-outlined"
             >{@html iconSymbolsByOrder[sortOrder]}</span
@@ -48,5 +49,11 @@
     align-items: flex-end;
     /* font-size: 19px; */
     font-size: 17px;
+  }
+
+  .table-columns-header__cell.th-small {
+    white-space: break-spaces;
+    font-size: 14px;
+    /* flex-wrap: wrap; */
   }
 </style>

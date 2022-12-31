@@ -22,7 +22,7 @@
   export let columns = [];
   export let settings = {};
   // -------- props --------
-  let isTdWrapHover = false;
+  // let isTdWrapHover = false;
   // вынес потому как, если хранить в объекте, то при смене страницы - пересчитывается сортировка
   let sortedBy = '';
   let sortOrder = 1;
@@ -35,6 +35,7 @@
       startFilteringDebounceMs: Math.max(0, Math.round(rowsData.length ** (1 / 2.7) / 2)),
       debugFilterLog: false,
       columnsIdxIsWrap: [],
+      columnsThSmall: [],
       isUseCache: true,
     },
     ...settings,
@@ -252,7 +253,7 @@
         {handleFilterTyping}
         bind:filterInputBindValues
       />
-      <TableColumnHeader {columnsShown} {changeSortSettingsHandler} {sortedBy} {sortOrder} />
+      <TableColumnHeader {columnsShown} {changeSortSettingsHandler} {sortedBy} {sortOrder} columnsThSmall={__.columnsThSmall}/>
     </thead>
     <tbody>
       {#each rowsPage as row}
@@ -371,15 +372,15 @@
   }
   .component-table .td-content-wrap {
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 10;
     -webkit-box-orient: vertical;
   }
-  /* .component-table tr:hover .td-content-wrap {
+  .component-table tr:hover .td-content-wrap {
+    -webkit-line-clamp: 40;
+  }
+  /* .component-table tr:active .td-content-wrap {
     -webkit-line-clamp: 30;
   } */
-  .component-table tr:active .td-content-wrap {
-    -webkit-line-clamp: 30;
-  }
   .component-table .td-wrap {
     white-space: break-spaces;
     width: max-content !important;
@@ -387,6 +388,7 @@
     min-width: 220px;
     max-width: 480px !important;
   }
+
   :global(.component-table mark) {
     /* background-color: hsl(120deg 93% 88%); */
     background-color: hsl(60deg 93% 88%);

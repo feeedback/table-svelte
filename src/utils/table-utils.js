@@ -2,7 +2,7 @@
 
 export const CHAR_STARS_WITH = '^';
 
-export const mapMarkToFn = {
+export const MAP_MARK_TO_FN = {
   '>=': (pivot) => (x) => Number(x) >= Number(pivot),
   '>': (pivot) => (x) => Number(x) > Number(pivot),
   '<=': (pivot) => (x) => Number(x) <= Number(pivot),
@@ -11,16 +11,16 @@ export const mapMarkToFn = {
   '!': (pivot) => (x) => x != pivot,
   '!=': (pivot) => (x) => x != pivot,
 };
-export const marksSet = new Set(Object.keys(mapMarkToFn));
-const marks = [...marksSet].sort((a, b) => b.length - a.length);
+export const MARKS_SET = new Set(Object.keys(MAP_MARK_TO_FN));
+const MARKS = [...MARKS_SET].sort((a, b) => b.length - a.length);
 
 export const isMathMark = (str) => str && /^[><]/.test(str);
 export const isValidMathExpression = (pivotValue) => !Number.isNaN(Number(pivotValue));
 export const isExpression = (str) => str && /^[!>=<]/.test(str);
-export const isEmptyExpression = (str) => marks.some((mark) => str === mark);
+export const isEmptyExpression = (str) => MARKS.some((mark) => str === mark);
 
 export const parseOneExpression = (expression) => {
-  const indexMarkEnd = marks.find((mark) => expression.startsWith(mark))?.length;
+  const indexMarkEnd = MARKS.find((mark) => expression.startsWith(mark))?.length;
 
   if (!indexMarkEnd) {
     return null;
@@ -69,7 +69,7 @@ export const isInvalidExpression = (exp) => parseExpression(exp) === null;
 export const isValidExpression = (exp) => isExpression(exp) && !isInvalidExpression(exp);
 
 export const getExpressionCheckFn = (exp) => (queryValue) =>
-  exp.every(({ mark, pivotValue }) => mapMarkToFn[mark](pivotValue)(queryValue));
+  exp.every(({ mark, pivotValue }) => MAP_MARK_TO_FN[mark](pivotValue)(queryValue));
 
 export const highlightQueryInFiltered = (queryValueRaw, value) => {
   if (queryValueRaw === null || !queryValueRaw || isExpression(queryValueRaw)) {

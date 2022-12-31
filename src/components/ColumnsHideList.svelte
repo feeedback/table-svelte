@@ -41,12 +41,12 @@
   }
 
   .columns-hide-list__list {
-    width: 11em;
+    width: 16em;
     overflow: hidden;
     padding-left: 1em;
     padding-right: 0.8em;
     padding-bottom: 0.5em;
-    font-size: 20px;
+    font-size: 18px;
     margin: 0;
     margin-top: 1em;
     font-family: 'Roboto';
