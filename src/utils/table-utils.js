@@ -102,24 +102,24 @@ export const FILTER_ENUM = {
   INVALID_EXPRESSION: 'INVALID_EXPRESSION',
 };
 
-export const saveLoadSettingsCache = ({ columns, filter, settings, filterInputBindValues }) => {
+export const saveLoadSettingsCache = ({ hiddenColumns, sortedBy, sortOrder, filter, filterInputBindValues }) => {
   const cache = {
-    columns: localStorage.getItem('table.columns'),
-    settings: localStorage.getItem('table.settings'),
+    hiddenColumns: localStorage.getItem('table.hiddenColumns'),
+    sort: localStorage.getItem('table.sort'),
     filter: localStorage.getItem('table.filter'),
     filterInputBindValues: localStorage.getItem('table.filterInputBindValues'),
   };
 
-  if (!cache.columns) {
-    localStorage.setItem('table.columns', JSON.stringify(columns));
-    localStorage.setItem('table.settings', JSON.stringify(settings));
+  if (!cache.hiddenColumns) {
+    localStorage.setItem('table.hiddenColumns', JSON.stringify(hiddenColumns));
+    localStorage.setItem('table.sort', JSON.stringify({ sortedBy, sortOrder }));
     localStorage.setItem('table.filter', JSON.stringify(filter));
     localStorage.setItem('table.filterInputBindValues', JSON.stringify(filterInputBindValues));
-    return { columns, filter, settings, filterInputBindValues };
+    return { hiddenColumns, sort: { sortedBy, sortOrder }, filter, filterInputBindValues };
   }
 
-  cache.columns = JSON.parse(cache.columns);
-  cache.settings = cache.settings ? { ...JSON.parse(cache.settings), pageNow: 0 } : settings;
+  cache.hiddenColumns = JSON.parse(cache.hiddenColumns);
+  cache.sort = JSON.parse(cache.sort);
   cache.filter = cache.filter ? JSON.parse(cache.filter) : filter;
   cache.filterInputBindValues = cache.filterInputBindValues
     ? JSON.parse(cache.filterInputBindValues)

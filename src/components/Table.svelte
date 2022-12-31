@@ -35,10 +35,11 @@
       startFilteringDebounceMs: Math.max(0, Math.round(rowsData.length ** (1 / 2.7) / 2)),
       debugFilterLog: false,
       columnsIdxIsWrap: [],
-      isUseCache: false,
+      isUseCache: true,
     },
     ...settings,
   };
+  // console.log(__);
   // -----------------------
   const columnLen = columns.length;
   const debounce = createDebounceFn(__.startFilteringDebounceMs);
@@ -55,9 +56,17 @@
   let filterInputBindValues = new Array(columnLen).fill(null);
 
   if (__.isUseCache) {
-    let cache = saveLoadSettingsCache({ columns, filter, settings: __, filterInputBindValues });
-    columns = cache.columns;
-    __ = cache.settings;
+    let cache = saveLoadSettingsCache({
+      hiddenColumns: __.hiddenColumns,
+      sortedBy,
+      sortOrder,
+      filter,
+      filterInputBindValues,
+    });
+    __.hiddenColumns = cache.hiddenColumns;
+    sortedBy = cache.sort.sortedBy;
+    sortOrder = cache.sort.sortOrder;
+
     filter = cache.filter;
     filterInputBindValues = cache.filterInputBindValues;
     cache = undefined;
@@ -65,12 +74,12 @@
 
   const saveColumnSettings = () => {
     if (__.isUseCache) {
-      localStorage.setItem('table.settings', JSON.stringify(__));
+      localStorage.setItem('table.hiddenColumns', JSON.stringify(__.hiddenColumns));
     }
   };
   const saveSortSettings = () => {
     if (__.isUseCache) {
-      localStorage.setItem('table.settings', JSON.stringify(__));
+      localStorage.setItem('table.sort', JSON.stringify({ sortedBy, sortOrder }));
     }
   };
   const saveFilterSettings = () => {
@@ -349,6 +358,10 @@
   .component-table td {
     max-width: 240px;
   }
+  .component-table td:first-child {
+    font-weight: bold;
+    max-width: 300px;
+  }
   .component-table .td-content {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -358,23 +371,25 @@
   }
   .component-table .td-content-wrap {
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 20;
     -webkit-box-orient: vertical;
   }
   .component-table .td-wrap {
     white-space: break-spaces;
     width: max-content !important;
     word-break: break-all;
-    min-width: 180px;
+    min-width: 220px;
     max-width: 480px !important;
   }
   :global(.component-table mark) {
-    background-color: hsl(120deg 93% 88%);
+    /* background-color: hsl(120deg 93% 88%); */
+    background-color: hsl(60deg 93% 88%)
   }
   .component-table tbody tr:nth-child(odd) {
     background-color: hsl(0, 0%, 97%);
   }
   .component-table tbody tr:hover {
-    background-color: hsl(120deg 93% 88%);
+    /* background-color: hsl(120deg 93% 88%); */
+    background-color: hsl(120deg 99% 93%);
   }
 </style>

@@ -21,6 +21,8 @@
     min-width: 32em;
   }
   .table-counts-container {
+    width: 80vw;
+    /* max-width: 1000px; */
     display: flex;
     justify-content: space-between;
     align-content: center;
