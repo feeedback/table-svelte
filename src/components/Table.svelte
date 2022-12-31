@@ -22,7 +22,7 @@
   export let columns = [];
   export let settings = {};
   // -------- props --------
-
+  let isTdWrapHover = false;
   // вынес потому как, если хранить в объекте, то при смене страницы - пересчитывается сортировка
   let sortedBy = '';
   let sortOrder = 1;
@@ -371,8 +371,14 @@
   }
   .component-table .td-content-wrap {
     display: -webkit-box;
-    -webkit-line-clamp: 20;
+    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+  }
+  /* .component-table tr:hover .td-content-wrap {
+    -webkit-line-clamp: 30;
+  } */
+  .component-table tr:active .td-content-wrap {
+    -webkit-line-clamp: 30;
   }
   .component-table .td-wrap {
     white-space: break-spaces;
@@ -383,7 +389,7 @@
   }
   :global(.component-table mark) {
     /* background-color: hsl(120deg 93% 88%); */
-    background-color: hsl(60deg 93% 88%)
+    background-color: hsl(60deg 93% 88%);
   }
   .component-table tbody tr:nth-child(odd) {
     background-color: hsl(0, 0%, 97%);
