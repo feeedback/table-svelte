@@ -67,16 +67,19 @@
     expFnByColumnIdx: new Array(columnLen).fill(null),
   };
   let filterInputBindValues = new Array(columnLen).fill(null);
-  console.log('__.isUseCache :>> ', __.isUseCache);
+
   if (__.isUseCache) {
-    let cache = saveLoadSettingsCache({
-      columns,
-      hiddenColumns: __.hiddenColumns,
-      sortedBy,
-      sortOrder,
-      filter,
-      filterInputBindValues,
-    });
+    let cache = saveLoadSettingsCache(
+      {
+        columns,
+        hiddenColumns: __.hiddenColumns,
+        sortedBy,
+        sortOrder,
+        filter,
+        filterInputBindValues,
+      },
+      cachePrefix
+    );
     __.hiddenColumns = cache.hiddenColumns;
     sortedBy = cache.sort.sortedBy;
     sortOrder = cache.sort.sortOrder;
