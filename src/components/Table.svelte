@@ -21,8 +21,14 @@
 
   const dispatch = createEventDispatcher();
 
-  function clickOnTrHandler(eventTarget, data) {
-    dispatch('message', { eventTarget, data });
+  function clickOnTrHandler({ type: eventType = 'click', target: eventTarget, ctrlKey, shiftKey, metaKey }, data) {
+    dispatch('message', {
+      message: 'TABLE_EVENT',
+      eventType,
+      eventTarget,
+      data,
+      keys: { ctrlKey, shiftKey, metaKey },
+    });
   }
 
   // -------- props --------
@@ -249,11 +255,10 @@
     rel="stylesheet"
     href="https://fonts.sandbox.google.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,300..700,0..1,0..200"
   />
-  <link rel="preconnect" href="https://fonts.googleapis.com" /><link
-    rel="preconnect"
-    href="https://fonts.gstatic.com"
-    crossorigin
-  /><link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /><link
+    href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300&display=swap"
+    rel="stylesheet"
+  />
 </svelte:head>
 
 <div class="component-table__container" id="component-table">
@@ -262,25 +267,15 @@
   <table class="component-table">
     <thead>
       <TableCountsContainer {counts} bind:pageNow={__.pageNow} />
-      <FilterContainer
-        {columnsShown}
-        stateFilter={filter.state}
-        {FILTER_ENUM}
-        {handleFilterTyping}
-        bind:filterInputBindValues
-      />
-      <TableColumnHeader
-        {columnsShown}
-        {changeSortSettingsHandler}
-        {sortedBy}
-        {sortOrder}
-        columnsThSmall={__.columnsThSmall}
-      />
+      <FilterContainer {columnsShown} stateFilter={filter.state} {FILTER_ENUM} {handleFilterTyping} bind:filterInputBindValues />
+      <TableColumnHeader {columnsShown} {changeSortSettingsHandler} {sortedBy} {sortOrder} columnsThSmall={__.columnsThSmall} />
     </thead>
     <tbody>
       {#each rowsPage as row}
         <tr
-          on:dblclick={(event) => clickOnTrHandler(event.target, row)}
+          on:dblclick={(event) => clickOnTrHandler(event, row)}
+          on:dragstart={(event) => clickOnTrHandler(event, row)}
+          on:touchmove={(event) => clickOnTrHandler(event, row)}
           class:tr-highlight={isHighlight && rowsIdxHighlight.includes(row[0])}
         >
           {#each row as cell, index}
@@ -315,8 +310,7 @@
     color: #333;
     margin: 0;
     padding: 8px;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue',
-      sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
   }
 
   :global(input, button, select, textarea) {
