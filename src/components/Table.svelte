@@ -17,6 +17,14 @@
     CHAR_STARS_WITH,
   } from '../utils/table-utils.js';
 
+  import { createEventDispatcher } from 'svelte';
+
+  const dispatch = createEventDispatcher();
+
+  function clickOnTrHandler(eventTarget, data) {
+    dispatch('message', { eventTarget, data });
+  }
+
   // -------- props --------
   export let rowsData = [];
   export let columns = [];
@@ -253,11 +261,17 @@
         {handleFilterTyping}
         bind:filterInputBindValues
       />
-      <TableColumnHeader {columnsShown} {changeSortSettingsHandler} {sortedBy} {sortOrder} columnsThSmall={__.columnsThSmall}/>
+      <TableColumnHeader
+        {columnsShown}
+        {changeSortSettingsHandler}
+        {sortedBy}
+        {sortOrder}
+        columnsThSmall={__.columnsThSmall}
+      />
     </thead>
     <tbody>
       {#each rowsPage as row}
-        <tr>
+        <tr on:click={(event)=> clickOnTrHandler(event.target, row)}>
           {#each row as cell, index}
             {#if !__.hiddenColumns.includes(index)}
               <td class:td-wrap={__.columnsIdxIsWrap.includes(index)}>
