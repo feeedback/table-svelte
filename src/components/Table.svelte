@@ -48,6 +48,10 @@
     },
     ...settings,
   };
+  export let rowsIdxHighlight = [];
+  export let isHighlight = true;
+  export let isTdWrapSmall = false;
+  export let cachePrefix = 'table';
   // console.log(__);
   // -----------------------
   const columnLen = columns.length;
@@ -63,9 +67,10 @@
     expFnByColumnIdx: new Array(columnLen).fill(null),
   };
   let filterInputBindValues = new Array(columnLen).fill(null);
-
+  console.log('__.isUseCache :>> ', __.isUseCache);
   if (__.isUseCache) {
     let cache = saveLoadSettingsCache({
+      columns,
       hiddenColumns: __.hiddenColumns,
       sortedBy,
       sortOrder,
@@ -83,18 +88,18 @@
 
   const saveColumnSettings = () => {
     if (__.isUseCache) {
-      localStorage.setItem('table.hiddenColumns', JSON.stringify(__.hiddenColumns));
+      localStorage.setItem(cachePrefix + '.hiddenColumns', JSON.stringify(__.hiddenColumns));
     }
   };
   const saveSortSettings = () => {
     if (__.isUseCache) {
-      localStorage.setItem('table.sort', JSON.stringify({ sortedBy, sortOrder }));
+      localStorage.setItem(cachePrefix + '.sort', JSON.stringify({ sortedBy, sortOrder }));
     }
   };
   const saveFilterSettings = () => {
     if (__.isUseCache) {
-      localStorage.setItem('table.filter', JSON.stringify(filter));
-      localStorage.setItem('table.filterInputBindValues', JSON.stringify(filterInputBindValues));
+      localStorage.setItem(cachePrefix + '.filter', JSON.stringify(filter));
+      localStorage.setItem(cachePrefix + '.filterInputBindValues', JSON.stringify(filterInputBindValues));
     }
   };
 
@@ -271,10 +276,16 @@
     </thead>
     <tbody>
       {#each rowsPage as row}
-        <tr on:click={(event)=> clickOnTrHandler(event.target, row)}>
+        <tr
+          on:dblclick={(event) => clickOnTrHandler(event.target, row)}
+          class:tr-highlight={isHighlight && rowsIdxHighlight.includes(row[0])}
+        >
           {#each row as cell, index}
             {#if !__.hiddenColumns.includes(index)}
-              <td class:td-wrap={__.columnsIdxIsWrap.includes(index)}>
+              <td
+                class:td-wrap={__.columnsIdxIsWrap.includes(index)}
+                class:td-wrap-small={isTdWrapSmall && __.columnsIdxIsWrap.includes(index)}
+              >
                 <span class="td-content" class:td-content-wrap={__.columnsIdxIsWrap.includes(index)}>{@html cell}</span>
               </td>
             {/if}
@@ -389,6 +400,9 @@
     -webkit-line-clamp: 10;
     -webkit-box-orient: vertical;
   }
+  .component-table .td-wrap-small .td-content-wrap {
+    -webkit-line-clamp: 1;
+  }
   .component-table tr:hover .td-content-wrap {
     -webkit-line-clamp: 40;
   }
@@ -413,5 +427,9 @@
   .component-table tbody tr:hover {
     /* background-color: hsl(120deg 93% 88%); */
     background-color: hsl(120deg 99% 93%);
+  }
+  .component-table tbody tr.tr-highlight {
+    /* background-color: hsl(120deg 93% 88%); */
+    background-color: rgb(255, 230, 219);
   }
 </style>

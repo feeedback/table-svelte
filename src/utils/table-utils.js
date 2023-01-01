@@ -102,24 +102,48 @@ export const FILTER_ENUM = {
   INVALID_EXPRESSION: 'INVALID_EXPRESSION',
 };
 
-export const saveLoadSettingsCache = ({ hiddenColumns, sortedBy, sortOrder, filter, filterInputBindValues }) => {
+export const saveLoadSettingsCache = (
+  { columns, hiddenColumns, sortedBy, sortOrder, filter, filterInputBindValues },
+  cachePrefix = 'table'
+) => {
+  if (columns.length === 0) {
+    return {
+      hiddenColumns,
+      sort: { sortedBy, sortOrder },
+      filter,
+      filterInputBindValues,
+    };
+  }
+  const oldColumns = localStorage.getItem(`${cachePrefix}.columns`);
+  localStorage.setItem(`${cachePrefix}.columns`, JSON.stringify(columns));
+
+  if (oldColumns && JSON.stringify(columns) !== oldColumns) {
+    return {
+      hiddenColumns,
+      sort: { sortedBy, sortOrder },
+      filter,
+      filterInputBindValues,
+    };
+  }
+
   const cache = {
-    hiddenColumns: localStorage.getItem('table.hiddenColumns'),
-    sort: localStorage.getItem('table.sort'),
-    filter: localStorage.getItem('table.filter'),
-    filterInputBindValues: localStorage.getItem('table.filterInputBindValues'),
+    hiddenColumns: localStorage.getItem(`${cachePrefix}.hiddenColumns`),
+    sort: localStorage.getItem(`${cachePrefix}.sort`),
+    filter: localStorage.getItem(`${cachePrefix}.filter`),
+    filterInputBindValues: localStorage.getItem(`${cachePrefix}.filterInputBindValues`),
   };
 
   if (!cache.hiddenColumns) {
-    localStorage.setItem('table.hiddenColumns', JSON.stringify(hiddenColumns));
-    localStorage.setItem('table.sort', JSON.stringify({ sortedBy, sortOrder }));
-    localStorage.setItem('table.filter', JSON.stringify(filter));
-    localStorage.setItem('table.filterInputBindValues', JSON.stringify(filterInputBindValues));
+    localStorage.setItem(`${cachePrefix}.hiddenColumns`, JSON.stringify(hiddenColumns));
+    localStorage.setItem(`${cachePrefix}.sort`, JSON.stringify({ sortedBy, sortOrder }));
+    localStorage.setItem(`${cachePrefix}.filter`, JSON.stringify(filter));
+    localStorage.setItem(`${cachePrefix}.filterInputBindValues`, JSON.stringify(filterInputBindValues));
     return { hiddenColumns, sort: { sortedBy, sortOrder }, filter, filterInputBindValues };
   }
 
   cache.hiddenColumns = JSON.parse(cache.hiddenColumns);
   cache.sort = JSON.parse(cache.sort);
+
   cache.filter = cache.filter ? JSON.parse(cache.filter) : filter;
   cache.filterInputBindValues = cache.filterInputBindValues
     ? JSON.parse(cache.filterInputBindValues)
