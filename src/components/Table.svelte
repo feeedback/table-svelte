@@ -55,6 +55,7 @@
     ...settings,
   };
   export let rowsIdxHighlight = [];
+  export let isSelectText = true;
   export let isHighlight = true;
   export let isTdWrapSmall = false;
   export let cachePrefix = 'table';
@@ -264,7 +265,7 @@
 <div class="component-table__container" id="component-table">
   <ColumnsHideList {columns} hiddenColumns={__.hiddenColumns} {handlers} />
 
-  <table class="component-table">
+  <table class="component-table" class:no-select-text={!isSelectText}>
     <thead>
       <TableCountsContainer {counts} bind:pageNow={__.pageNow} />
       <FilterContainer {columnsShown} stateFilter={filter.state} {FILTER_ENUM} {handleFilterTyping} bind:filterInputBindValues />
@@ -368,9 +369,13 @@
     /* user-select: none; */
     /* text-align: center; */
   }
+  .component-table.no-select-text tr{
+    user-select: none;
+    cursor: pointer;
+  }
 
   .component-table td {
-    user-select: text;
+    /* user-select: text; */
 
     padding-left: 15px;
     padding-right: 10px;
