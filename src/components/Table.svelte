@@ -427,6 +427,7 @@
   }
   .component-table tbody tr.tr-highlight {
     /* background-color: hsl(120deg 93% 88%); */
-    background-color: rgb(255, 230, 219);
+    /* background-color: rgb(255, 230, 219); */
+    background-color: hsl(200deg 99% 95%);
   }
 </style>
