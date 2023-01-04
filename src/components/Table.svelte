@@ -257,7 +257,7 @@
     href="https://fonts.sandbox.google.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,300..700,0..1,0..200"
   />
   <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /><link
-    href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400&display=swap"
     rel="stylesheet"
   />
 </svelte:head>
@@ -369,7 +369,7 @@
     /* user-select: none; */
     /* text-align: center; */
   }
-  .component-table.no-select-text tr{
+  .component-table.no-select-text tr {
     user-select: none;
     cursor: pointer;
   }
@@ -429,6 +429,9 @@
   .component-table tbody tr:hover {
     /* background-color: hsl(120deg 93% 88%); */
     background-color: hsl(120deg 99% 93%);
+  }
+  .component-table tbody tr {
+    border-bottom: 1px #ffffff solid;
   }
   .component-table tbody tr.tr-highlight {
     /* background-color: hsl(120deg 93% 88%); */
