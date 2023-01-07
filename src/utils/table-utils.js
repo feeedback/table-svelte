@@ -24,7 +24,7 @@ export const isEmptyExpression = (str) => MARKS.some((mark) => str === mark && m
 
 export const parseOneExpression = (expression) => {
   const indexMarkEnd = MARKS.find((mark) => expression.startsWith(mark))?.length;
-  console.log({ expression, indexMarkEnd });
+
   if (!indexMarkEnd) {
     return null;
   }
@@ -54,7 +54,7 @@ export const parseExpression = (expressionRaw) => {
   const count = parts.length;
 
   const parsedConditions = parts.map((cond) => parseOneExpression(cond));
-  console.log('parsedConditions :>> ', parsedConditions);
+
   if (count > 1) {
     if (parsedConditions.some((exp) => exp && exp.mark === '=')) {
       return null;
@@ -111,7 +111,6 @@ export const saveLoadSettingsCache = (
   { columns, hiddenColumns, sortedBy, sortOrder, filter, filterInputBindValues },
   cachePrefix = 'table'
 ) => {
-  // console.log('saveLoadSettingsCache');
   if (columns.length === 0) {
     return {
       hiddenColumns,
@@ -129,7 +128,6 @@ export const saveLoadSettingsCache = (
     //   expFnByColumnIdx: new Array(columnLen).fill(null),
     // };
     // const filterInputBindValues = new Array(columnLen).fill(null);
-    console.log(filter, filterInputBindValues);
     localStorage.setItem(`${cachePrefix}.columns`, JSON.stringify(columns));
     return {
       hiddenColumns,

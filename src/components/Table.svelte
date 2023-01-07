@@ -59,7 +59,7 @@
   export let isHighlight = true;
   export let isTdWrapSmall = false;
   export let cachePrefix = 'table';
-  // console.log(__);
+
   // -----------------------
   const columnLen = columns.length;
   const debounce = createDebounceFn(__.startFilteringDebounceMs);
@@ -95,7 +95,7 @@
     filterInputBindValues = cache.filterInputBindValues;
     cache = undefined;
   }
-  console.log({ filter });
+
   const saveColumnSettings = () => {
     if (__.isUseCache) {
       localStorage.setItem(cachePrefix + '.hiddenColumns', JSON.stringify(__.hiddenColumns));
