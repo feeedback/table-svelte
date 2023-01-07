@@ -9,7 +9,9 @@ export const MAP_MARK_TO_FN = {
   '<': (pivot) => (x) => Number(x) < Number(pivot),
   '=': (pivot) => (x) => x == pivot,
   '!': (pivot) => (x) => x != pivot,
-  '~!': (pivot) => (x) => !`${x}`.includes(pivot),
+  '!~': (pivot) => (x) => !`${x}`.includes(pivot),
+  '!-': () => (x) => !x,
+  '!+': () => (x) => x,
   '!=': (pivot) => (x) => x != pivot,
 };
 export const MARKS_SET = new Set(Object.keys(MAP_MARK_TO_FN));
@@ -17,17 +19,24 @@ const MARKS = [...MARKS_SET].sort((a, b) => b.length - a.length);
 
 export const isMathMark = (str) => str && /^[><]/.test(str);
 export const isValidMathExpression = (pivotValue) => !Number.isNaN(Number(pivotValue));
-export const isExpression = (str) => str && /^[~!>=<]/.test(str);
-export const isEmptyExpression = (str) => MARKS.some((mark) => str === mark);
+export const isExpression = (str) => str && /^[~!+->=<]/.test(str);
+export const isEmptyExpression = (str) => MARKS.some((mark) => str === mark && mark !== '!-' && mark !== '!+');
 
 export const parseOneExpression = (expression) => {
   const indexMarkEnd = MARKS.find((mark) => expression.startsWith(mark))?.length;
-
+  console.log({ expression, indexMarkEnd });
   if (!indexMarkEnd) {
     return null;
   }
   const mark = expression.slice(0, indexMarkEnd).trim();
   const pivotValue = expression.slice(indexMarkEnd).trim();
+
+  if (mark === '!-' || mark === '!+') {
+    if (pivotValue === '') {
+      return { mark, pivotValue: 'x' };
+    }
+    return null;
+  }
 
   if (pivotValue === '') {
     return { mark, pivotValue: '' };
@@ -45,7 +54,7 @@ export const parseExpression = (expressionRaw) => {
   const count = parts.length;
 
   const parsedConditions = parts.map((cond) => parseOneExpression(cond));
-  console.log({ parsedConditions });
+  console.log('parsedConditions :>> ', parsedConditions);
   if (count > 1) {
     if (parsedConditions.some((exp) => exp && exp.mark === '=')) {
       return null;
