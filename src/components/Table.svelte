@@ -278,13 +278,11 @@
           on:dragstart={(event) => clickOnTrHandler(event, row)}
           on:touchmove={(event) => clickOnTrHandler(event, row)}
           class:tr-highlight={isHighlight && rowsIdxHighlight.includes(row[0])}
+          class:td-wrap-small={isTdWrapSmall}
         >
           {#each row as cell, index}
             {#if !__.hiddenColumns.includes(index)}
-              <td
-                class:td-wrap={__.columnsIdxIsWrap.includes(index)}
-                class:td-wrap-small={isTdWrapSmall && __.columnsIdxIsWrap.includes(index)}
-              >
+              <td class:td-wrap={__.columnsIdxIsWrap.includes(index)}>
                 <span class="td-content" class:td-content-wrap={__.columnsIdxIsWrap.includes(index)}>{@html cell}</span>
               </td>
             {/if}
@@ -399,43 +397,41 @@
   }
   .component-table .td-content-wrap {
     display: -webkit-box;
-    -webkit-line-clamp: 10;
     -webkit-box-orient: vertical;
+    -webkit-line-clamp: inherit;
   }
-  .component-table .td-wrap-small .td-content-wrap {
-    -webkit-line-clamp: 1;
-  }
-  .component-table tr:hover .td-content-wrap {
-    -webkit-line-clamp: 40;
-  }
-  /* .component-table tr:active .td-content-wrap {
-    -webkit-line-clamp: 30;
-  } */
+
   .component-table .td-wrap {
     white-space: break-spaces;
     width: max-content !important;
     word-break: break-all;
     min-width: 220px;
     max-width: 480px !important;
+    -webkit-line-clamp: inherit;
   }
 
   :global(.component-table mark) {
-    /* background-color: hsl(120deg 93% 88%); */
     background-color: hsl(60deg 93% 88%);
   }
   .component-table tbody tr:nth-child(odd) {
     background-color: hsl(0, 0%, 97%);
   }
   .component-table tbody tr:hover {
-    /* background-color: hsl(120deg 93% 88%); */
     background-color: hsl(120deg 99% 93%);
   }
+  .component-table tbody tr.td-wrap-small:active {
+    -webkit-line-clamp: 40;
+    border: 2px outset rgba(169, 161, 255, 0.3);
+  }
   .component-table tbody tr {
+    -webkit-line-clamp: 10;
     border-bottom: 1px #ffffff solid;
   }
+  .component-table tr.td-wrap-small {
+    -webkit-line-clamp: 1;
+  }
+
   .component-table tbody tr.tr-highlight {
-    /* background-color: hsl(120deg 93% 88%); */
-    /* background-color: rgb(255, 230, 219); */
     background-color: hsl(200deg 99% 95%);
   }
 </style>
