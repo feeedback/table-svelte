@@ -95,7 +95,7 @@
     filterInputBindValues = cache.filterInputBindValues;
     cache = undefined;
   }
-
+  console.log({ filter });
   const saveColumnSettings = () => {
     if (__.isUseCache) {
       localStorage.setItem(cachePrefix + '.hiddenColumns', JSON.stringify(__.hiddenColumns));

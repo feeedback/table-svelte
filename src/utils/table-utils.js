@@ -9,6 +9,7 @@ export const MAP_MARK_TO_FN = {
   '<': (pivot) => (x) => Number(x) < Number(pivot),
   '=': (pivot) => (x) => x == pivot,
   '!': (pivot) => (x) => x != pivot,
+  '~!': (pivot) => (x) => !`${x}`.includes(pivot),
   '!=': (pivot) => (x) => x != pivot,
 };
 export const MARKS_SET = new Set(Object.keys(MAP_MARK_TO_FN));
@@ -16,7 +17,7 @@ const MARKS = [...MARKS_SET].sort((a, b) => b.length - a.length);
 
 export const isMathMark = (str) => str && /^[><]/.test(str);
 export const isValidMathExpression = (pivotValue) => !Number.isNaN(Number(pivotValue));
-export const isExpression = (str) => str && /^[!>=<]/.test(str);
+export const isExpression = (str) => str && /^[~!>=<]/.test(str);
 export const isEmptyExpression = (str) => MARKS.some((mark) => str === mark);
 
 export const parseOneExpression = (expression) => {
@@ -44,6 +45,7 @@ export const parseExpression = (expressionRaw) => {
   const count = parts.length;
 
   const parsedConditions = parts.map((cond) => parseOneExpression(cond));
+  console.log({ parsedConditions });
   if (count > 1) {
     if (parsedConditions.some((exp) => exp && exp.mark === '=')) {
       return null;
@@ -84,13 +86,7 @@ export const highlightQueryInFiltered = (queryValueRaw, value) => {
   const queryStart = strValue.toLowerCase().indexOf(queryValueStr);
   const queryEnd = queryStart + queryLen;
 
-  return [
-    strValue.slice(0, queryStart),
-    '<mark>',
-    strValue.slice(queryStart, queryEnd),
-    '</mark>',
-    strValue.slice(queryEnd),
-  ].join('');
+  return [strValue.slice(0, queryStart), '<mark>', strValue.slice(queryStart, queryEnd), '</mark>', strValue.slice(queryEnd)].join('');
 };
 
 export const FILTER_ENUM = {
@@ -106,6 +102,7 @@ export const saveLoadSettingsCache = (
   { columns, hiddenColumns, sortedBy, sortOrder, filter, filterInputBindValues },
   cachePrefix = 'table'
 ) => {
+  // console.log('saveLoadSettingsCache');
   if (columns.length === 0) {
     return {
       hiddenColumns,
@@ -115,9 +112,16 @@ export const saveLoadSettingsCache = (
     };
   }
   const oldColumns = localStorage.getItem(`${cachePrefix}.columns`);
-  localStorage.setItem(`${cachePrefix}.columns`, JSON.stringify(columns));
 
   if (oldColumns && JSON.stringify(columns) !== oldColumns) {
+    // const filter = {
+    //   state: columns.map(() => FILTER_ENUM.NULL),
+    //   rawValueByColumnIdx: new Array(columnLen).fill(null),
+    //   expFnByColumnIdx: new Array(columnLen).fill(null),
+    // };
+    // const filterInputBindValues = new Array(columnLen).fill(null);
+    console.log(filter, filterInputBindValues);
+    localStorage.setItem(`${cachePrefix}.columns`, JSON.stringify(columns));
     return {
       hiddenColumns,
       sort: { sortedBy, sortOrder },
@@ -145,15 +149,11 @@ export const saveLoadSettingsCache = (
   cache.sort = JSON.parse(cache.sort);
 
   cache.filter = cache.filter ? JSON.parse(cache.filter) : filter;
-  cache.filterInputBindValues = cache.filterInputBindValues
-    ? JSON.parse(cache.filterInputBindValues)
-    : filterInputBindValues;
+  cache.filterInputBindValues = cache.filterInputBindValues ? JSON.parse(cache.filterInputBindValues) : filterInputBindValues;
 
   Object.keys(cache.filter.expFnByColumnIdx).forEach((colIdx) => {
     if (cache.filter.state[colIdx] === FILTER_ENUM.VALID_EXPRESSION) {
-      cache.filter.expFnByColumnIdx[colIdx] = getExpressionCheckFn(
-        parseExpression(cache.filter.rawValueByColumnIdx[colIdx])
-      );
+      cache.filter.expFnByColumnIdx[colIdx] = getExpressionCheckFn(parseExpression(cache.filter.rawValueByColumnIdx[colIdx]));
     } else if (cache.filter.state[colIdx] === FILTER_ENUM.INVALID_EXPRESSION) {
       cache.filter.state[colIdx] = FILTER_ENUM.NULL;
       cache.filter.rawValueByColumnIdx[colIdx] = null;
