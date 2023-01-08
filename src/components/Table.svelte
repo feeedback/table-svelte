@@ -55,6 +55,7 @@
     ...settings,
   };
   export let rowsIdxHighlight = [];
+  export let rowsHighlightField = 'id';
   export let isSelectText = true;
   export let isHighlight = true;
   export let isTdWrapSmall = false;
@@ -67,6 +68,8 @@
   $: columnsShown = Object.entries(columns)
     .map(([index, name]) => [Number(index), name])
     .filter(([index]) => !__.hiddenColumns.includes(index));
+
+  $: rowsHighlightQueryFieldIndex = columns.indexOf(rowsHighlightField);
 
   let filter = {
     state: columns.map(() => FILTER_ENUM.NULL),
@@ -277,7 +280,7 @@
           on:dblclick={(event) => clickOnTrHandler(event, row)}
           on:dragstart={(event) => clickOnTrHandler(event, row)}
           on:touchmove={(event) => clickOnTrHandler(event, row)}
-          class:tr-highlight={isHighlight && rowsIdxHighlight.includes(row[0])}
+          class:tr-highlight={isHighlight && rowsIdxHighlight.includes(row[rowsHighlightQueryFieldIndex])}
           class:td-wrap-small={isTdWrapSmall}
         >
           {#each row as cell, index}
@@ -419,7 +422,7 @@
   .component-table tbody tr:hover {
     background-color: hsl(120deg 99% 93%);
   }
-  .component-table tbody tr.td-wrap-small:active {
+  .component-table tbody tr.td-wrap-small:hover {
     -webkit-line-clamp: 40;
     border: 2px outset rgba(169, 161, 255, 0.3);
   }
