@@ -38,20 +38,21 @@
     cursor: pointer;
     font-weight: bold;
     line-height: initial;
+    font-size: 16px;
   }
 
   .columns-hide-list__list {
     width: 16em;
     overflow: hidden;
-    padding-left: 1em;
-    padding-right: 0.8em;
-    padding-bottom: 0.5em;
-    font-size: 18px;
+    padding-left: 10px;
+    padding-right: 8px;
+    padding-bottom: 8px;
+    font-size: 16px;
     margin: 0;
     margin-top: 1em;
     font-family: 'Roboto';
     display: flex;
     flex-direction: column;
-    row-gap: 2px;
+    row-gap: 1px;
   }
 </style>

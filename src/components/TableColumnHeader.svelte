@@ -15,13 +15,15 @@
 
 <tr class="table-columns-header__row">
   {#each columnsShown as [columnIndex, columnName]}
-    <th on:click={() => changeSortSettingsHandler(columnName)} class="table-columns-header__cell" class:th-small={columnsThSmall.includes(columnIndex)}>
+    <th
+      on:click={() => changeSortSettingsHandler(columnName)}
+      class="table-columns-header__cell"
+      class:th-small={columnsThSmall.includes(columnIndex)}
+    >
       <span class="table-columns-header"
-        ><span>{columnsThSmall.includes(columnIndex) ? columnName.split(/\.?(?=[A-Z])/).join(' '): columnName}</span>
+        ><span>{columnsThSmall.includes(columnIndex) ? columnName.split(/\.?(?=[A-Z])/).join(' ') : columnName}</span>
         {#if sortedBy === columnName}
-          <span class="table-columns-header__icon-sort material-symbols-outlined"
-            >{@html iconSymbolsByOrder[sortOrder]}</span
-          >
+          <span class="table-columns-header__icon-sort material-symbols-outlined">{@html iconSymbolsByOrder[sortOrder]}</span>
         {/if}</span
       >
     </th>
@@ -48,7 +50,7 @@
     justify-content: center;
     align-items: flex-end;
     /* font-size: 19px; */
-    font-size: 17px;
+    font-size: 16px;
   }
 
   .table-columns-header__cell.th-small {

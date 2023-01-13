@@ -18,6 +18,7 @@
   } from '../utils/table-utils.js';
 
   import { createEventDispatcher } from 'svelte';
+  import Image from '../../../src/components/item/Image.svelte';
 
   const dispatch = createEventDispatcher();
 
@@ -167,6 +168,7 @@
   };
 
   $: sortedByIndex = columns.indexOf(sortedBy);
+  $: imgClassIndex = columns.indexOf('img');
 
   $: counts = {
     rowsAll: rowsData.length,
@@ -285,9 +287,13 @@
         >
           {#each row as cell, index}
             {#if !__.hiddenColumns.includes(index)}
-              <td class:td-wrap={__.columnsIdxIsWrap.includes(index)}>
-                <span class="td-content" class:td-content-wrap={__.columnsIdxIsWrap.includes(index)}>{@html cell}</span>
-              </td>
+              {#if index === imgClassIndex}
+                <td> <Image imgClass={row[imgClassIndex]} /></td>
+              {:else}
+                <td class:td-wrap={__.columnsIdxIsWrap.includes(index)}>
+                  <span class="td-content" class:td-content-wrap={__.columnsIdxIsWrap.includes(index)}>{@html cell}</span>
+                </td>
+              {/if}
             {/if}
           {/each}
         </tr>
@@ -349,7 +355,7 @@
   .component-table__container {
     margin: 0 15px;
     font-family: monospace;
-    font-size: 16px;
+    font-size: 14px;
     margin-left: auto;
     margin-right: auto;
     margin-top: 8px;
@@ -382,7 +388,7 @@
     padding-right: 10px;
     /* for min-width hack */
     /* width: 86px; */
-    width: 110px;
+    width: 80px;
   }
   .component-table td {
     max-width: 240px;
@@ -427,7 +433,7 @@
     border: 2px outset rgba(169, 161, 255, 0.3);
   }
   .component-table tbody tr {
-    -webkit-line-clamp: 20;
+    -webkit-line-clamp: 14;
     border-bottom: 1px #ffffff solid;
   }
   .component-table tr.td-wrap-small {
