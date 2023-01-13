@@ -427,7 +427,7 @@
     border: 2px outset rgba(169, 161, 255, 0.3);
   }
   .component-table tbody tr {
-    -webkit-line-clamp: 10;
+    -webkit-line-clamp: 20;
     border-bottom: 1px #ffffff solid;
   }
   .component-table tr.td-wrap-small {
