@@ -18,7 +18,6 @@
   } from '../utils/table-utils.js';
 
   import { createEventDispatcher } from 'svelte';
-  import Image from '../../../src/components/item/Image.svelte';
 
   const dispatch = createEventDispatcher();
 
@@ -36,6 +35,7 @@
   export let rowsData = [];
   export let columns = [];
   export let settings = {};
+  export let ImageComponent;
   // -------- props --------
   // let isTdWrapHover = false;
   // вынес потому как, если хранить в объекте, то при смене страницы - пересчитывается сортировка
@@ -254,6 +254,14 @@
     saveSortSettings();
   };
   const changeSortSettingsHandler = (columnName) => debounce(() => _changeSortSettingsHandler(columnName));
+
+  const getRowObj = (data) => {
+    const objItem = {};
+    columns.forEach((col, i) => {
+      objItem[col] = data[i];
+    });
+    return objItem;
+  };
 </script>
 
 <svelte:head>
@@ -288,7 +296,7 @@
           {#each row as cell, index}
             {#if !__.hiddenColumns.includes(index)}
               {#if index === imgClassIndex}
-                <td> <Image imgClass={row[imgClassIndex]} /></td>
+                <td> <svelte:component this={ImageComponent} imgClass={row[imgClassIndex]} item={getRowObj(row)} /></td>
               {:else}
                 <td class:td-wrap={__.columnsIdxIsWrap.includes(index)}>
                   <span class="td-content" class:td-content-wrap={__.columnsIdxIsWrap.includes(index)}>{@html cell}</span>
