@@ -168,7 +168,7 @@
   };
 
   $: sortedByIndex = columns.indexOf(sortedBy);
-  $: imgClassIndex = columns.indexOf('img');
+  $: imgColumnIndex = columns.indexOf('img');
 
   $: counts = {
     rowsAll: rowsData.length,
@@ -295,8 +295,8 @@
         >
           {#each row as cell, index}
             {#if !__.hiddenColumns.includes(index)}
-              {#if index === imgClassIndex}
-                <td> <svelte:component this={ImageComponent} imgClass={row[imgClassIndex]} item={getRowObj(row)} /></td>
+              {#if index === imgColumnIndex}
+                <td> <svelte:component this={ImageComponent} img={row[imgColumnIndex]} rowObj={getRowObj(row)} /></td>
               {:else}
                 <td class:td-wrap={__.columnsIdxIsWrap.includes(index)}>
                   <span class="td-content" class:td-content-wrap={__.columnsIdxIsWrap.includes(index)}>{@html cell}</span>
