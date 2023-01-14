@@ -437,12 +437,16 @@
     background-color: hsl(120deg 99% 93%);
   }
   .component-table tbody tr.td-wrap-small:hover {
-    -webkit-line-clamp: 40;
+    -webkit-line-clamp: 50;
     border: 2px outset rgba(169, 161, 255, 0.3);
   }
   .component-table tbody tr {
-    -webkit-line-clamp: 14;
+    -webkit-line-clamp: 30;
     border-bottom: 1px #ffffff solid;
+  }
+  :global(.component-table tbody tr summary) {
+    user-select: none;
+    cursor: pointer;
   }
   .component-table tr.td-wrap-small {
     -webkit-line-clamp: 1;
