@@ -448,6 +448,11 @@
     user-select: none;
     cursor: pointer;
   }
+  :global(.component-table tbody tr details) {
+    display: inline-block;
+    margin-top: 6px;
+    margin-bottom: 4px;
+  }
   .component-table tr.td-wrap-small {
     -webkit-line-clamp: 1;
   }

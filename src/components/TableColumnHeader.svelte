@@ -34,7 +34,8 @@
   .table-columns-header__cell {
     user-select: none;
     cursor: pointer;
-    padding: 0.5em 0;
+    /* padding: 0.5em 0; */
+    padding: 0;
     /* padding-right: 0.8em; */
   }
   .table-columns-header__icon-sort {

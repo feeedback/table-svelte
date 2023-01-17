@@ -20,7 +20,8 @@
 <style>
   .columns-hide-list__container {
     top: 69px;
-    left: 18px;
+    /* left: 18px; */
+    left: 4px;
     position: absolute;
     display: flex;
     flex-wrap: wrap;

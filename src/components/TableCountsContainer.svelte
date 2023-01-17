@@ -29,7 +29,8 @@
     align-items: center;
     /* width: 80%; */
     font-size: 18px;
-    margin-bottom: 4px;
+    /* margin-bottom: 4px; */
+    margin-top: 4px;
     /* font-family: 'Roboto'; */
     vertical-align: middle;
     height: 28px;
