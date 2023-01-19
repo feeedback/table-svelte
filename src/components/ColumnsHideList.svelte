@@ -43,15 +43,16 @@
   }
 
   .columns-hide-list__list {
-    width: 16em;
+    width: 290px;
     overflow: hidden;
-    padding-left: 10px;
-    padding-right: 8px;
+    padding-left: 9px;
+    padding-right: 5px;
     padding-bottom: 8px;
-    font-size: 16px;
+    font-size: 18px;
     margin: 0;
     margin-top: 1em;
-    font-family: 'Roboto';
+    /* font-family: 'Roboto'; */
+    font-family: 'PT Sans Narrow';
     display: flex;
     flex-direction: column;
     row-gap: 1px;

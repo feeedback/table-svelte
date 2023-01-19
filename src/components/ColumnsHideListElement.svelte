@@ -10,23 +10,18 @@
 </script>
 
 <div class="columns-hide-list-element">
-  <div
-    class="columns-hide-list-element__name-box"
-    class:columns-list__name_hidden={hiddenColumns.includes(columnIndex)}
-  >
+  <div class="columns-hide-list-element__name-box" class:columns-list__name_hidden={hiddenColumns.includes(columnIndex)}>
     <span class="columns-hide-list-element__name" title={columnName}>{columnName}</span>
   </div>
 
   <div class="columns-hide-list-element__button-box">
     {#if hiddenColumns.includes(columnIndex)}
-      <button
-        class="columns-hide-list-element__add-column material-symbols-outlined"
-        on:click={() => handlers.showColumn(columnIndex)}>{@html icons.add}</button
+      <button class="columns-hide-list-element__add-column material-symbols-outlined" on:click={() => handlers.showColumn(columnIndex)}
+        >{@html icons.add}</button
       >
     {:else}
-      <button
-        class="columns-hide-list-element__hide-column material-symbols-outlined"
-        on:click={() => handlers.hideColumn(columnIndex)}>{@html icons.hide}</button
+      <button class="columns-hide-list-element__hide-column material-symbols-outlined" on:click={() => handlers.hideColumn(columnIndex)}
+        >{@html icons.hide}</button
       >
     {/if}
   </div>
@@ -95,11 +90,13 @@
   .columns-list__name_hidden {
     text-decoration: line-through;
     /* color: #b7b7b7; */
-    color: #a3a3a3;
+    /* color: #a3a3a3; */
+    color: #a0a0a0;
     /* color: #757777; */
     text-decoration-thickness: 1px;
     /* text-decoration-color: rgba(225, 128, 128, 0.486); */
     text-decoration-color: rgba(225, 128, 128, 0.6);
+
     /* text-decoration-style: double; */
   }
 </style>
