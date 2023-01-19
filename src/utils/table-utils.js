@@ -121,14 +121,19 @@ export const saveLoadSettingsCache = (
   }
   const oldColumns = localStorage.getItem(`${cachePrefix}.columns`);
 
-  if (oldColumns && JSON.stringify(columns) !== oldColumns) {
+  if (JSON.stringify(columns) !== oldColumns) {
     // const filter = {
     //   state: columns.map(() => FILTER_ENUM.NULL),
     //   rawValueByColumnIdx: new Array(columnLen).fill(null),
     //   expFnByColumnIdx: new Array(columnLen).fill(null),
     // };
     // const filterInputBindValues = new Array(columnLen).fill(null);
+
     localStorage.setItem(`${cachePrefix}.columns`, JSON.stringify(columns));
+    localStorage.setItem(`${cachePrefix}.hiddenColumns`, JSON.stringify(hiddenColumns));
+    localStorage.setItem(`${cachePrefix}.sort`, JSON.stringify({ sortedBy, sortOrder }));
+    localStorage.setItem(`${cachePrefix}.filter`, JSON.stringify(filter));
+    localStorage.setItem(`${cachePrefix}.filterInputBindValues`, JSON.stringify(filterInputBindValues));
     return {
       hiddenColumns,
       sort: { sortedBy, sortOrder },
