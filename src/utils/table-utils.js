@@ -122,46 +122,38 @@ export const saveLoadSettingsCache = (
   const oldColumns = localStorage.getItem(`${cachePrefix}.columns`);
 
   if (JSON.stringify(columns) !== oldColumns) {
-    // const filter = {
-    //   state: columns.map(() => FILTER_ENUM.NULL),
-    //   rawValueByColumnIdx: new Array(columnLen).fill(null),
-    //   expFnByColumnIdx: new Array(columnLen).fill(null),
-    // };
-    // const filterInputBindValues = new Array(columnLen).fill(null);
-
     localStorage.setItem(`${cachePrefix}.columns`, JSON.stringify(columns));
     localStorage.setItem(`${cachePrefix}.hiddenColumns`, JSON.stringify(hiddenColumns));
     localStorage.setItem(`${cachePrefix}.sort`, JSON.stringify({ sortedBy, sortOrder }));
     localStorage.setItem(`${cachePrefix}.filter`, JSON.stringify(filter));
     localStorage.setItem(`${cachePrefix}.filterInputBindValues`, JSON.stringify(filterInputBindValues));
-    return {
-      hiddenColumns,
-      sort: { sortedBy, sortOrder },
-      filter,
-      filterInputBindValues,
-    };
+
+    return { hiddenColumns, sort: { sortedBy, sortOrder }, filter, filterInputBindValues };
   }
 
-  const cache = {
+  const rawCache = {
     hiddenColumns: localStorage.getItem(`${cachePrefix}.hiddenColumns`),
     sort: localStorage.getItem(`${cachePrefix}.sort`),
     filter: localStorage.getItem(`${cachePrefix}.filter`),
     filterInputBindValues: localStorage.getItem(`${cachePrefix}.filterInputBindValues`),
   };
 
-  if (!cache.hiddenColumns) {
+  if (!rawCache.hiddenColumns) {
     localStorage.setItem(`${cachePrefix}.hiddenColumns`, JSON.stringify(hiddenColumns));
     localStorage.setItem(`${cachePrefix}.sort`, JSON.stringify({ sortedBy, sortOrder }));
     localStorage.setItem(`${cachePrefix}.filter`, JSON.stringify(filter));
     localStorage.setItem(`${cachePrefix}.filterInputBindValues`, JSON.stringify(filterInputBindValues));
+
     return { hiddenColumns, sort: { sortedBy, sortOrder }, filter, filterInputBindValues };
   }
 
-  cache.hiddenColumns = JSON.parse(cache.hiddenColumns);
-  cache.sort = JSON.parse(cache.sort);
+  const cache = {
+    hiddenColumns: JSON.parse(rawCache.hiddenColumns),
+    sort: JSON.parse(rawCache.sort),
 
-  cache.filter = cache.filter ? JSON.parse(cache.filter) : filter;
-  cache.filterInputBindValues = cache.filterInputBindValues ? JSON.parse(cache.filterInputBindValues) : filterInputBindValues;
+    filter: rawCache.filter ? JSON.parse(rawCache.filter) : filter,
+    filterInputBindValues: rawCache.filterInputBindValues ? JSON.parse(rawCache.filterInputBindValues) : filterInputBindValues,
+  };
 
   Object.keys(cache.filter.expFnByColumnIdx).forEach((colIdx) => {
     if (cache.filter.state[colIdx] === FILTER_ENUM.VALID_EXPRESSION) {
