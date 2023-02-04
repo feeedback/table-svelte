@@ -20,8 +20,8 @@
       class="table-columns-header__cell"
       class:th-small={columnsThSmall.includes(columnIndex)}
     >
-      <span class="table-columns-header"
-        ><span>{columnsThSmall.includes(columnIndex) ? columnName.split(/\.?(?=[A-Z])/).join(' ') : columnName}</span>
+      <span class="table-columns-header">
+        <span>{columnName.split(/\.?(?=[A-Z])/).join(' ')}</span>
         {#if sortedBy === columnName}
           <span class="table-columns-header__icon-sort material-symbols-outlined">{@html iconSymbolsByOrder[sortOrder]}</span>
         {/if}</span
@@ -37,6 +37,7 @@
     /* padding: 0.5em 0; */
     padding: 0;
     /* padding-right: 0.8em; */
+    font-size: 16px;
   }
   .table-columns-header__icon-sort {
     margin-left: 2px;
@@ -51,12 +52,12 @@
     justify-content: center;
     align-items: flex-end;
     /* font-size: 19px; */
-    font-size: 16px;
+    font-size: inherit;
   }
 
   .table-columns-header__cell.th-small {
     white-space: break-spaces;
-    font-size: 14px;
+    font-size: 15px;
     /* flex-wrap: wrap; */
   }
 </style>
